@@ -7,220 +7,77 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            --primary: #ff8c00; /* Pomarańcz z logo */
+            --primary: #ff8c00;
             --bg: #0f0f0f;
             --card-bg: #1a1a1a;
             --text: #ffffff;
             --text-muted: #b0b0b0;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            scroll-behavior: smooth;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; scroll-behavior: smooth; }
 
         /* Header / Nav */
         nav {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 10%;
-            background: rgba(15, 15, 15, 0.95);
-            position: fixed;
-            width: 100%;
-            top: 0;
-            z-index: 1000;
-            border-bottom: 1px solid #333;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 10%; background: rgba(15, 15, 15, 0.98);
+            position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333;
         }
 
-        .logo-text {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: var(--primary);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-        }
+        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; flex: 1; }
 
-        nav ul {
-            display: flex;
-            list-style: none;
-            align-items: center;
-        }
+        /* Kontener na przyciski akcji */
+        .nav-controls { display: flex; align-items: center; gap: 15px; }
 
-        nav ul li {
-            margin-left: 20px;
-        }
+        .nav-links { display: flex; list-style: none; align-items: center; }
+        .nav-links li { margin-left: 25px; }
+        .nav-links li a { color: var(--text); text-decoration: none; transition: 0.3s; font-size: 0.9rem; font-weight: 500; }
+        .nav-links li a:hover { color: var(--primary); }
 
-        nav ul li a {
-            color: var(--text);
-            text-decoration: none;
-            transition: 0.3s;
-            font-size: 0.9rem;
-        }
-
-        nav ul li a:hover {
-            color: var(--primary);
-        }
-
-        /* Language Switcher */
         .lang-switch {
-            background: transparent;
-            border: 1px solid var(--primary);
-            color: var(--primary);
-            padding: 5px 10px;
-            cursor: pointer;
-            border-radius: 4px;
-            font-weight: bold;
-            font-size: 0.8rem;
-            transition: 0.3s;
-            margin-left: 20px;
-        }
-
-        .lang-switch:hover {
-            background: var(--primary);
-            color: #000;
-        }
-
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            background: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1350&q=80');
-            background-size: cover;
-            padding: 0 20px;
-        }
-
-        .hero img {
-            max-width: 200px;
-            margin-bottom: 20px;
-            filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.3));
-        }
-
-        .hero h1 {
-            font-size: clamp(1.8rem, 5vw, 2.8rem); 
-            margin-bottom: 15px;
-            line-height: 1.2;
-            max-width: 900px;
-        }
-
-        .hero p {
-            font-size: 1.1rem;
-            color: var(--text-muted);
-            margin-bottom: 30px;
-        }
-
-        /* Sekcje */
-        .section {
-            padding: 80px 10%;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-            margin-top: 40px;
-        }
-
-        .card {
-            background: var(--card-bg);
-            padding: 30px;
-            border-radius: 12px;
-            text-align: center;
-            transition: 0.3s;
-            border: 1px solid #222;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-            border-color: var(--primary);
-        }
-
-        .card i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 15px;
-        }
-
-        /* Przyciski */
-        .cta-container {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
-
-        .btn {
-            padding: 10px 25px;
-            border-radius: 6px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: 0.3s;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 0.9rem;
-        }
-
-        .btn-primary {
-            background-color: var(--primary);
-            color: #000;
-        }
-
-        .btn-secondary {
-            border: 1px solid var(--primary);
-            color: var(--primary);
-        }
-
-        .btn:hover {
-            transform: scale(1.05);
-            background-color: white;
-            color: black;
-            border-color: white;
-        }
-
-        footer {
-            text-align: center;
-            padding: 40px;
-            border-top: 1px solid #222;
-            color: var(--text-muted);
-        }
-
-        .social-footer {
-            margin-top: 15px;
-            font-size: 1.2rem;
-        }
-
-        .social-footer a {
-            color: var(--text-muted);
-            margin: 0 10px;
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem;
             transition: 0.3s;
         }
+        .lang-switch:hover { background: var(--primary); color: #000; }
 
-        .social-footer a:hover {
-            color: var(--primary);
-        }
+        .menu-toggle { display: none; color: var(--text); font-size: 1.4rem; cursor: pointer; }
 
-        .highlight {
-            color: var(--primary);
-        }
+        /* Hero */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1350&q=80'); background-size: cover; padding: 100px 20px 50px 20px; }
+        .hero img { max-width: 220px; margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.3)); }
+        .hero h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px; }
+        
+        /* Sections */
+        .section { padding: 80px 10%; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
+        .card { background: var(--card-bg); padding: 35px; border-radius: 12px; text-align: center; border: 1px solid #222; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
+        
+        /* Buttons */
+        .cta-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .btn { padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .btn-primary { background-color: var(--primary); color: #000; }
+        .btn-secondary { border: 1px solid var(--primary); color: var(--primary); }
+        .btn:hover { transform: scale(1.05); background-color: white; color: black; }
 
+        footer { text-align: center; padding: 40px; border-top: 1px solid #222; color: var(--text-muted); }
+        .social-footer { margin-top: 15px; font-size: 1.5rem; }
+        .social-footer a { color: var(--text-muted); margin: 0 15px; transition: 0.3s; }
+        .social-footer a:hover { color: var(--primary); }
+        .highlight { color: var(--primary); }
+
+        /* Mobile Adjustments */
         @media (max-width: 768px) {
-            nav { padding: 15px 5%; }
-            nav ul { display: none; }
-            .hero { padding-top: 60px; }
+            nav { padding: 10px 5%; }
+            .menu-toggle { display: block; }
+            .nav-links {
+                display: none; flex-direction: column; position: absolute; top: 100%; left: 0;
+                width: 100%; background: #151515; padding: 20px; border-bottom: 1px solid #333;
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { margin: 15px 0; text-align: center; }
         }
     </style>
 </head>
@@ -228,82 +85,58 @@
 
     <nav>
         <div class="logo-text">OSH QRD Studio</div>
-        <ul>
-            <li><a href="#home" class="lang" data-en="Start" data-pl="Start">Start</a></li>
-            <li><a href="#about" class="lang" data-en="About" data-pl="O mnie">About</a></li>
-            <li><a href="#portfolio" class="lang" data-en="Links" data-pl="Linki">Links</a></li>
-            <li><button class="lang-switch" onclick="toggleLang()">PL / EN</button></li>
+        
+        <div class="nav-controls">
+            <button class="lang-switch" onclick="toggleLang()">PL / EN</button>
+            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        </div>
+
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#home" onclick="closeMenu()" class="lang" data-en="Start" data-pl="Start">Start</a></li>
+            <li><a href="#about" onclick="closeMenu()" class="lang" data-en="About" data-pl="O mnie">About</a></li>
+            <li><a href="#portfolio" onclick="closeMenu()" class="lang" data-en="Portfolio" data-pl="Portfolio">Portfolio</a></li>
         </ul>
     </nav>
 
     <section class="hero" id="home">
         <img src="logo.png" alt="OSH QRD Studio Logo">
-        <h1 class="lang" 
-            data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" 
-            data-pl="CYFROWE ŚWIATY <span class='highlight'>W TWOIM ZASIĘGU</span>">
+        <h1 class="lang" data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" data-pl="CYFROWE ŚWIATY <span class='highlight'>W TWOIM ZASIĘGU</span>">
             DIGITAL WORLDS <span class="highlight">WITHIN YOUR REACH</span>
         </h1>
-        <p class="lang" 
-           data-en="Game Developer | 3D Artist | 3D Printing" 
-           data-pl="Twórca Gier | Grafik 3D | Wydruki 3D">
-           Game Developer | 3D Artist | 3D Printing
+        <p class="lang" data-en="Game Developer | 3D Artist | 3D Printing" data-pl="Twórca Gier | Grafik 3D | Wydruki 3D">
+            Game Developer | 3D Artist | 3D Printing
         </p>
-        
         <div class="cta-container">
-            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-primary" target="_blank">
-                <i class="fab fa-google-play"></i> Google Play
-            </a>
-            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank">
-                <i class="fab fa-itch-io"></i> Itch.io
-            </a>
-            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank">
-                <i class="fab fa-artstation"></i> ArtStation
-            </a>
+            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-primary" target="_blank"><i class="fab fa-google-play"></i> Google Play</a>
+            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank"><i class="fab fa-itch-io"></i> Itch.io</a>
+            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank"><i class="fab fa-artstation"></i> ArtStation</a>
         </div>
     </section>
 
     <section class="section" id="about">
-        <h2 style="text-align:center; font-size: 2rem;" class="lang" data-en="What do <span class='highlight'>I do?</span>" data-pl="Czym się <span class='highlight'>zajmuję?</span>">
-            What do <span class="highlight">I do?</span>
-        </h2>
+        <h2 style="text-align:center; font-size: 2rem;" class="lang" data-en="What do <span class='highlight'>I do?</span>" data-pl="Czym się <span class='highlight'>zajmuję?</span>">What do <span class="highlight">I do?</span></h2>
         <div class="grid">
             <div class="card">
                 <i class="fas fa-gamepad"></i>
                 <h3 class="lang" data-en="Gamedev" data-pl="Gamedev">Gamedev</h3>
-                <p class="lang" 
-                   data-en="I create games for PC and Android, focusing on unique gameplay and atmosphere." 
-                   data-pl="Tworzę gry na platformy PC oraz Android, dbając o unikalny gameplay i klimat.">
-                   I create games for PC and Android, focusing on unique gameplay and atmosphere.
-                </p>
+                <p class="lang" data-en="I create games for PC and Android, focusing on unique gameplay and atmosphere." data-pl="Tworzę gry na platformy PC oraz Android, dbając o unikalny gameplay i klimat.">I create games for PC and Android, focusing on unique gameplay and atmosphere.</p>
             </div>
             <div class="card">
                 <i class="fas fa-cube"></i>
                 <h3 class="lang" data-en="3D Models" data-pl="Modele 3D">3D Models</h3>
-                <p class="lang" 
-                   data-en="I prepare optimized 3D assets for game engines and high-quality renders." 
-                   data-pl="Przygotowuję optymalizowane assety 3D pod silniki gier oraz wysokiej jakości rendery.">
-                   I prepare optimized 3D assets for game engines and high-quality renders.
-                </p>
+                <p class="lang" data-en="I prepare optimized 3D assets for game engines and high-quality renders." data-pl="Przygotowuję optymalizowane assety 3D pod silniki gier oraz wysokiej jakości rendery.">I prepare optimized 3D assets for game engines and high-quality renders.</p>
             </div>
             <div class="card">
                 <i class="fas fa-print"></i>
                 <h3 class="lang" data-en="3D Printing" data-pl="Druk 3D">3D Printing</h3>
-                <p class="lang" 
-                   data-en="I design and prepare print-ready files, from figurines to technical parts." 
-                   data-pl="Projektuję i przygotowuję pliki gotowe do druku, od figurek po elementy techniczne.">
-                   I design and prepare print-ready files, from figurines to technical parts.
-                </p>
+                <p class="lang" data-en="I design and prepare print-ready files, from figurines to technical parts." data-pl="Projektuję i przygotowuję pliki gotowe do druku, od figurek po elementy techniczne.">I design and prepare print-ready files, from figurines to technical parts.</p>
             </div>
         </div>
     </section>
 
     <section class="section" id="portfolio" style="background-color: #141414; text-align: center;">
-        <h2 style="font-size: 2rem; margin-bottom: 30px;" class="lang" data-en="My <span class='highlight'>Portfolio</span>" data-pl="Moje <span class='highlight'>Portfolio</span>">
-            My <span class="highlight">Portfolio</span>
-        </h2>
-        <p style="color: var(--text-muted); margin-bottom: 40px;" class="lang" data-en="Check out my projects on external platforms:" data-pl="Sprawdź moje projekty w serwisach zewnętrznych:">
-            Check out my projects on external platforms:
-        </p>
+        <h2 style="font-size: 2rem; margin-bottom: 30px;" class="lang" data-en="My <span class='highlight'>Portfolio</span>" data-pl="Moje <span class='highlight'>Portfolio</span>">My <span class="highlight">Portfolio</span></h2>
+        <p style="color: var(--text-muted); margin-bottom: 40px;" class="lang" data-en="Check out my projects on external platforms:" data-pl="Sprawdź moje projekty w serwisach zewnętrznych:">Check out my projects on external platforms:</p>
         <div class="cta-container">
             <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-secondary" target="_blank">Android Games</a>
             <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank">PC Games</a>
@@ -312,9 +145,7 @@
     </section>
 
     <footer>
-        <p class="lang" data-en="&copy; 2026 OSH QRD Studio. All rights reserved." data-pl="&copy; 2026 OSH QRD Studio. Wszystkie prawa zastrzeżone.">
-            &copy; 2026 OSH QRD Studio. All rights reserved.
-        </p>
+        <p class="lang" data-en="&copy; 2026 OSH QRD Studio. All rights reserved." data-pl="&copy; 2026 OSH QRD Studio. Wszystkie prawa zastrzeżone.">&copy; 2026 OSH QRD Studio. All rights reserved.</p>
         <div class="social-footer">
             <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" target="_blank"><i class="fab fa-google-play"></i></a>
             <a href="http://oshq.itch.io" target="_blank"><i class="fab fa-itch-io"></i></a>
@@ -324,20 +155,15 @@
 
     <script>
         let currentLang = 'en';
-
         function toggleLang() {
             currentLang = currentLang === 'en' ? 'pl' : 'en';
-            const elements = document.querySelectorAll('.lang');
-            
-            elements.forEach(el => {
-                const text = el.getAttribute(`data-${currentLang}`);
-                el.innerHTML = text;
+            document.querySelectorAll('.lang').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
             });
-
-            // Zmiana atrybutu lang w tagu html
             document.documentElement.lang = currentLang;
         }
+        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
+        function closeMenu() { document.getElementById('navLinks').classList.remove('active'); }
     </script>
-
 </body>
 </html>
