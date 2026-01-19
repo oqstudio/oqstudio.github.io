@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -53,6 +53,7 @@
         nav ul {
             display: flex;
             list-style: none;
+            align-items: center;
         }
 
         nav ul li {
@@ -68,6 +69,25 @@
 
         nav ul li a:hover {
             color: var(--primary);
+        }
+
+        /* Language Switcher */
+        .lang-switch {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            padding: 5px 10px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            transition: 0.3s;
+            margin-left: 20px;
+        }
+
+        .lang-switch:hover {
+            background: var(--primary);
+            color: #000;
         }
 
         /* Hero Section */
@@ -89,7 +109,6 @@
             filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.3));
         }
 
-        /* Poprawiony nagłówek - mniejszy i responsywny */
         .hero h1 {
             font-size: clamp(1.8rem, 5vw, 2.8rem); 
             margin-bottom: 15px;
@@ -210,16 +229,25 @@
     <nav>
         <div class="logo-text">OSH QRD Studio</div>
         <ul>
-            <li><a href="#home">Start</a></li>
-            <li><a href="#about">O mnie</a></li>
-            <li><a href="#portfolio">Linki</a></li>
+            <li><a href="#home" class="lang" data-en="Start" data-pl="Start">Start</a></li>
+            <li><a href="#about" class="lang" data-en="About" data-pl="O mnie">About</a></li>
+            <li><a href="#portfolio" class="lang" data-en="Links" data-pl="Linki">Links</a></li>
+            <li><button class="lang-switch" onclick="toggleLang()">PL / EN</button></li>
         </ul>
     </nav>
 
     <section class="hero" id="home">
         <img src="logo.png" alt="OSH QRD Studio Logo">
-        <h1>CYFROWE ŚWIATY <span class="highlight">W TWOIM ZASIĘGU</span></h1>
-        <p>Twórca Gier | Grafik 3D | Wydruki 3D</p>
+        <h1 class="lang" 
+            data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" 
+            data-pl="CYFROWE ŚWIATY <span class='highlight'>W TWOIM ZASIĘGU</span>">
+            DIGITAL WORLDS <span class="highlight">WITHIN YOUR REACH</span>
+        </h1>
+        <p class="lang" 
+           data-en="Game Developer | 3D Artist | 3D Printing" 
+           data-pl="Twórca Gier | Grafik 3D | Wydruki 3D">
+           Game Developer | 3D Artist | 3D Printing
+        </p>
         
         <div class="cta-container">
             <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-primary" target="_blank">
@@ -235,29 +263,47 @@
     </section>
 
     <section class="section" id="about">
-        <h2 style="text-align:center; font-size: 2rem;">Czym się <span class="highlight">zajmuję?</span></h2>
+        <h2 style="text-align:center; font-size: 2rem;" class="lang" data-en="What do <span class='highlight'>I do?</span>" data-pl="Czym się <span class='highlight'>zajmuję?</span>">
+            What do <span class="highlight">I do?</span>
+        </h2>
         <div class="grid">
             <div class="card">
                 <i class="fas fa-gamepad"></i>
-                <h3>Gamedev</h3>
-                <p>Tworzę gry na platformy PC oraz Android, dbając o unikalny gameplay i klimat.</p>
+                <h3 class="lang" data-en="Gamedev" data-pl="Gamedev">Gamedev</h3>
+                <p class="lang" 
+                   data-en="I create games for PC and Android, focusing on unique gameplay and atmosphere." 
+                   data-pl="Tworzę gry na platformy PC oraz Android, dbając o unikalny gameplay i klimat.">
+                   I create games for PC and Android, focusing on unique gameplay and atmosphere.
+                </p>
             </div>
             <div class="card">
                 <i class="fas fa-cube"></i>
-                <h3>Modele 3D</h3>
-                <p>Przygotowuję optymalizowane assety 3D pod silniki gier oraz wysokiej jakości rendery.</p>
+                <h3 class="lang" data-en="3D Models" data-pl="Modele 3D">3D Models</h3>
+                <p class="lang" 
+                   data-en="I prepare optimized 3D assets for game engines and high-quality renders." 
+                   data-pl="Przygotowuję optymalizowane assety 3D pod silniki gier oraz wysokiej jakości rendery.">
+                   I prepare optimized 3D assets for game engines and high-quality renders.
+                </p>
             </div>
             <div class="card">
                 <i class="fas fa-print"></i>
-                <h3>Druk 3D</h3>
-                <p>Projektuję i przygotowuję pliki gotowe do druku, od figurek po elementy techniczne.</p>
+                <h3 class="lang" data-en="3D Printing" data-pl="Druk 3D">3D Printing</h3>
+                <p class="lang" 
+                   data-en="I design and prepare print-ready files, from figurines to technical parts." 
+                   data-pl="Projektuję i przygotowuję pliki gotowe do druku, od figurek po elementy techniczne.">
+                   I design and prepare print-ready files, from figurines to technical parts.
+                </p>
             </div>
         </div>
     </section>
 
     <section class="section" id="portfolio" style="background-color: #141414; text-align: center;">
-        <h2 style="font-size: 2rem; margin-bottom: 30px;">Moje <span class="highlight">Portfolio</span></h2>
-        <p style="color: var(--text-muted); margin-bottom: 40px;">Sprawdź moje projekty w serwisach zewnętrznych:</p>
+        <h2 style="font-size: 2rem; margin-bottom: 30px;" class="lang" data-en="My <span class='highlight'>Portfolio</span>" data-pl="Moje <span class='highlight'>Portfolio</span>">
+            My <span class="highlight">Portfolio</span>
+        </h2>
+        <p style="color: var(--text-muted); margin-bottom: 40px;" class="lang" data-en="Check out my projects on external platforms:" data-pl="Sprawdź moje projekty w serwisach zewnętrznych:">
+            Check out my projects on external platforms:
+        </p>
         <div class="cta-container">
             <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-secondary" target="_blank">Android Games</a>
             <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank">PC Games</a>
@@ -266,13 +312,32 @@
     </section>
 
     <footer>
-        <p>&copy; 2026 OSH QRD Studio. Wszystkie prawa zastrzeżone.</p>
+        <p class="lang" data-en="&copy; 2026 OSH QRD Studio. All rights reserved." data-pl="&copy; 2026 OSH QRD Studio. Wszystkie prawa zastrzeżone.">
+            &copy; 2026 OSH QRD Studio. All rights reserved.
+        </p>
         <div class="social-footer">
             <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" target="_blank"><i class="fab fa-google-play"></i></a>
             <a href="http://oshq.itch.io" target="_blank"><i class="fab fa-itch-io"></i></a>
             <a href="https://oshq.artstation.com" target="_blank"><i class="fab fa-artstation"></i></a>
         </div>
     </footer>
+
+    <script>
+        let currentLang = 'en';
+
+        function toggleLang() {
+            currentLang = currentLang === 'en' ? 'pl' : 'en';
+            const elements = document.querySelectorAll('.lang');
+            
+            elements.forEach(el => {
+                const text = el.getAttribute(`data-${currentLang}`);
+                el.innerHTML = text;
+            });
+
+            // Zmiana atrybutu lang w tagu html
+            document.documentElement.lang = currentLang;
+        }
+    </script>
 
 </body>
 </html>
