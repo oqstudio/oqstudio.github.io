@@ -51,7 +51,7 @@
         .card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
         
-        /* Contact Section - Poprawione wyrównanie */
+        /* Contact Section - FIXED ALIGNMENT */
         .contact-box { 
             background: var(--card-bg); 
             padding: 40px; 
@@ -59,16 +59,17 @@
             border: 1px solid var(--primary); 
             max-width: 500px; 
             margin: 40px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start; /* Wyrównanie do lewej wewnątrz ramki */
-            padding-left: 20%; /* Estetyczny margines od lewej krawędzi ramki */
+            text-align: center; /* Centruje kontener wewnętrzny */
         }
-        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 1.1rem; }
+        .contact-content {
+            display: inline-block; /* Zawęża się do treści */
+            text-align: left; /* Wyrównuje tekst wewnątrz do lewej */
+        }
+        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 1.1rem; }
         .contact-item span.label { width: 80px; font-weight: bold; color: var(--primary); }
         .contact-item a { color: var(--text); text-decoration: none; transition: 0.3s; }
         .contact-item a:hover { color: var(--primary); }
-        .contact-item i { color: var(--primary); font-size: 1.4rem; width: 30px; }
+        .contact-item i { color: var(--primary); font-size: 1.4rem; width: 25px; }
         .discord-tag { background: #333; padding: 5px 12px; border-radius: 5px; font-weight: bold; border: 1px dashed var(--primary); color: var(--primary) !important; text-decoration: none !important; }
         .discord-tag:hover { background: var(--primary); color: #000 !important; }
 
@@ -94,7 +95,6 @@
             }
             .nav-links.active { display: flex; }
             .nav-links li { margin: 15px 0; text-align: center; }
-            .contact-box { padding-left: 10%; }
             .section { padding: 60px 5%; }
         }
     </style>
@@ -163,15 +163,17 @@
     <section class="section" id="contact" style="text-align: center;">
         <h2 class="lang" data-en="Get in <span class='highlight'>Touch</span>" data-pl="Zostańmy w <span class='highlight'>Kontakcie</span>">Get in <span class="highlight">Touch</span></h2>
         <div class="contact-box">
-            <div class="contact-item">
-                <i class="fas fa-envelope"></i>
-                <span class="label">E-mail:</span>
-                <a href="mailto:oshqrd@gmail.com">oshqrd@gmail.com</a>
-            </div>
-            <div class="contact-item">
-                <i class="fab fa-discord"></i>
-                <span class="label">Discord:</span>
-                <a href="https://discord.com/users/5941817462261149900" target="_blank" class="discord-tag">oshq</a>
+            <div class="contact-content">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <span class="label">E-mail:</span>
+                    <a href="mailto:oshqrd@gmail.com">oshqrd@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-discord"></i>
+                    <span class="label">Discord:</span>
+                    <a href="https://discord.com/users/5941817462261149900" target="_blank" class="discord-tag">oshq</a>
+                </div>
             </div>
         </div>
     </section>
