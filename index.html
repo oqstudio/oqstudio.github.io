@@ -51,7 +51,7 @@
         .card:hover { transform: translateY(-5px); border-color: var(--primary); }
         .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
         
-        /* Contact Section - FIXED ALIGNMENT */
+        /* Contact Section */
         .contact-box { 
             background: var(--card-bg); 
             padding: 40px; 
@@ -59,26 +59,33 @@
             border: 1px solid var(--primary); 
             max-width: 500px; 
             margin: 40px auto;
-            text-align: center; /* Centruje kontener wewnętrzny */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding-left: 20%;
         }
-        .contact-content {
-            display: inline-block; /* Zawęża się do treści */
-            text-align: left; /* Wyrównuje tekst wewnątrz do lewej */
-        }
-        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 1.1rem; }
+        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 1.1rem; }
         .contact-item span.label { width: 80px; font-weight: bold; color: var(--primary); }
         .contact-item a { color: var(--text); text-decoration: none; transition: 0.3s; }
         .contact-item a:hover { color: var(--primary); }
-        .contact-item i { color: var(--primary); font-size: 1.4rem; width: 25px; }
+        .contact-item i { color: var(--primary); font-size: 1.4rem; width: 30px; }
         .discord-tag { background: #333; padding: 5px 12px; border-radius: 5px; font-weight: bold; border: 1px dashed var(--primary); color: var(--primary) !important; text-decoration: none !important; }
         .discord-tag:hover { background: var(--primary); color: #000 !important; }
 
         /* Buttons */
         .cta-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .btn { padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-size: 0.9rem; }
+        .btn { padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-size: 0.9rem; cursor: pointer; border: none; }
         .btn-primary { background-color: var(--primary); color: #000; }
-        .btn-secondary { border: 1px solid var(--primary); color: var(--primary); }
+        .btn-secondary { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
         .btn:hover { transform: scale(1.05); background-color: white; color: black; }
+
+        /* Auth Modal Styles */
+        #authModal input {
+            width: 100%; padding: 12px; margin-bottom: 15px; 
+            background: #222; border: 1px solid #444; 
+            color: white; border-radius: 5px;
+        }
+        #authModal .card { position: relative; max-width: 350px; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #333; }
 
         footer { text-align: center; padding: 40px; border-top: 1px solid #222; color: var(--text-muted); }
         .social-footer { margin-top: 15px; font-size: 1.5rem; }
@@ -95,6 +102,7 @@
             }
             .nav-links.active { display: flex; }
             .nav-links li { margin: 15px 0; text-align: center; }
+            .contact-box { padding-left: 10%; }
             .section { padding: 60px 5%; }
         }
     </style>
@@ -105,6 +113,7 @@
         <div class="logo-text">OSH QRD Studio</div>
         <div class="nav-controls">
             <button class="lang-switch" onclick="toggleLang()">PL / EN</button>
+            <button id="userBtn" class="lang-switch" onclick="toggleAuthModal()"><i class="fas fa-user"></i></button>
             <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <ul class="nav-links" id="navLinks">
@@ -114,6 +123,24 @@
             <li><a href="#contact" onclick="closeMenu()" class="lang" data-en="Contact" data-pl="Kontakt">Contact</a></li>
         </ul>
     </nav>
+
+    <div id="authModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center; padding: 20px;">
+        <div class="card">
+            <i class="fas fa-times" onclick="toggleAuthModal()" style="position:absolute; top:15px; right:15px; cursor:pointer; font-size:1.2rem; color: var(--primary);"></i>
+            <h3 id="modalTitle" style="margin-bottom:25px; font-size: 1.5rem;">Panel Admina</h3>
+            
+            <div id="authForm">
+                <input type="email" id="authEmail" placeholder="Email">
+                <input type="password" id="authPassword" placeholder="Hasło">
+                <button class="btn btn-primary" onclick="handleAuth()" style="width:100%; margin-bottom:15px;">Zaloguj się</button>
+            </div>
+            
+            <div id="userInfo" style="display:none; text-align: center;">
+                <p id="userDisplay" style="margin-bottom:20px; font-weight: bold; color: white;"></p>
+                <button class="btn btn-secondary" onclick="handleLogout()" style="width:100%;">Wyloguj się</button>
+            </div>
+        </div>
+    </div>
 
     <section class="hero" id="home">
         <img src="logo.png" alt="OSH QRD Studio Logo">
@@ -163,17 +190,15 @@
     <section class="section" id="contact" style="text-align: center;">
         <h2 class="lang" data-en="Get in <span class='highlight'>Touch</span>" data-pl="Zostańmy w <span class='highlight'>Kontakcie</span>">Get in <span class="highlight">Touch</span></h2>
         <div class="contact-box">
-            <div class="contact-content">
-                <div class="contact-item">
-                    <i class="fas fa-envelope"></i>
-                    <span class="label">E-mail:</span>
-                    <a href="mailto:oshqrd@gmail.com">oshqrd@gmail.com</a>
-                </div>
-                <div class="contact-item">
-                    <i class="fab fa-discord"></i>
-                    <span class="label">Discord:</span>
-                    <a href="https://discord.com/users/5941817462261149900" target="_blank" class="discord-tag">oshq</a>
-                </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <span class="label">E-mail:</span>
+                <a href="mailto:oshqrd@gmail.com">oshqrd@gmail.com</a>
+            </div>
+            <div class="contact-item">
+                <i class="fab fa-discord"></i>
+                <span class="label">Discord:</span>
+                <a href="https://discord.com/users/5941817462261149900" target="_blank" class="discord-tag">oshq</a>
             </div>
         </div>
     </section>
@@ -187,6 +212,72 @@
             <a href="mailto:oshqrd@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
         </div>
     </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAnEOlk-g8nFBbBKU7hp7aEbIq8u2NBGxI",
+            authDomain: "oqstudiopage.firebaseapp.com",
+            projectId: "oqstudiopage",
+            storageBucket: "oqstudiopage.firebasestorage.app",
+            messagingSenderId: "1036616830810",
+            appId: "1:1036616830810:web:6a7cfcde0e6a80454d2d63",
+            measurementId: "G-KC5B8K4HPJ"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        window.toggleAuthModal = () => {
+            const modal = document.getElementById('authModal');
+            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+        };
+
+        window.handleAuth = () => {
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
+
+            signInWithEmailAndPassword(auth, email, pass)
+                .then(() => { toggleAuthModal(); })
+                .catch(err => alert("Błąd logowania: " + err.message));
+        };
+
+        window.handleLogout = () => {
+            signOut(auth).then(() => { location.reload(); });
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            const form = document.getElementById('authForm');
+            const info = document.getElementById('userInfo');
+            const userBtn = document.getElementById('userBtn');
+            const navLinks = document.getElementById('navLinks');
+
+            if (user) {
+                form.style.display = 'none';
+                info.style.display = 'block';
+                document.getElementById('userDisplay').innerText = user.email;
+                userBtn.style.color = '#ff8c00';
+
+                // Wyświetlanie linku do druku 3D tylko dla admina
+                if (user.email === "pioosz2@gmail.com") {
+                    if (!document.getElementById('adminLink')) {
+                        const li = document.createElement('li');
+                        li.id = 'adminLink';
+                        li.innerHTML = '<a href="3dprint.html" style="color: #ff8c00; font-weight: bold;">DRUK 3D</a>';
+                        navLinks.appendChild(li);
+                    }
+                }
+            } else {
+                form.style.display = 'block';
+                info.style.display = 'none';
+                userBtn.style.color = 'var(--primary)';
+                const adminLink = document.getElementById('adminLink');
+                if (adminLink) adminLink.remove();
+            }
+        });
+    </script>
 
     <script>
         let currentLang = 'en';
