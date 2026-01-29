@@ -17,91 +17,193 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; scroll-behavior: smooth; }
 
-        /* Nav */
+        /* Nawigacja */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 10%; background: rgba(15, 15, 15, 0.98);
             position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333;
         }
-        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; flex: 1; }
+        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; flex: 1; cursor: pointer; }
         .nav-controls { display: flex; align-items: center; gap: 15px; }
         .nav-links { display: flex; list-style: none; align-items: center; }
         .nav-links li { margin-left: 25px; }
         .nav-links li a { color: var(--text); text-decoration: none; transition: 0.3s; font-size: 0.9rem; font-weight: 500; }
         .nav-links li a:hover { color: var(--primary); }
         .lang-switch { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
-
-        /* Modal */
-        #authModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center; padding: 20px; }
-        #authModal .card { position: relative; max-width: 350px; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #333; width: 100%; }
-        #authModal input { width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
-        
-        .btn { width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; margin-bottom: 10px; }
-        .btn-primary { background: var(--primary); color: black; }
-        .btn-google { background: white; color: #444; display: flex; align-items: center; justify-content: center; gap: 10px; }
-        .auth-footer { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); }
-        .auth-footer span { cursor: pointer; color: var(--primary); }
+        .menu-toggle { display: none; color: var(--text); font-size: 1.4rem; cursor: pointer; }
 
         /* Hero */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1350&q=80'); background-size: cover; }
-        .hero img { max-width: 220px; margin-bottom: 25px; }
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1350&q=80'); background-size: cover; padding: 100px 20px 50px 20px; }
+        .hero img { max-width: 220px; margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.3)); }
+        .hero h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px; }
         .highlight { color: var(--primary); }
+        
+        /* Sekcje */
+        .section { padding: 80px 10%; }
+        .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+        .card { background: var(--card-bg); padding: 35px; border-radius: 12px; text-align: center; border: 1px solid #222; transition: 0.3s; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
+
+        /* Portfolio */
+        .portfolio-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .btn { padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; cursor: pointer; border: none; min-width: 160px; }
+        .btn-primary { background-color: var(--primary); color: #000; }
+        .btn-secondary { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
+        .btn:hover { transform: scale(1.05); background-color: white; color: black; }
+
+        /* Kontakt - Wyśrodkowany blok, wyrównany do lewej w środku */
+        .contact-box { 
+            background: var(--card-bg); 
+            padding: 40px; 
+            border-radius: 15px; 
+            border: 1px solid var(--primary); 
+            max-width: 400px; 
+            margin: 0 auto; 
+            display: flex; 
+            justify-content: center; 
+        }
+        .contact-align { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
+        .contact-item { display: flex; align-items: center; gap: 15px; font-size: 1.1rem; }
+        .contact-item a { color: var(--text); text-decoration: none; transition: 0.3s; }
+        .contact-item a:hover { color: var(--primary); }
+        .contact-item i { width: 25px; color: var(--primary); text-align: center; font-size: 1.3rem; }
+
+        /* Modal Logowania */
+        #authModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center; padding: 20px; }
+        #authModal .card { position: relative; max-width: 380px; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #333; width: 100%; text-align: center; }
+        #authModal input { width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
+        .auth-btn-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .btn-google { background: white; color: #444; }
+
+        footer { text-align: center; padding: 40px 10%; border-top: 1px solid #222; color: var(--text-muted); }
+        .social-footer { font-size: 1.5rem; display: flex; gap: 20px; justify-content: center; margin-top: 15px; }
+        .social-footer a { color: var(--text-muted); transition: 0.3s; }
+        .social-footer a:hover { color: var(--primary); }
+
+        /* RWD */
+        @media (max-width: 768px) {
+            nav { padding: 10px 5%; }
+            .menu-toggle { display: block; }
+            .nav-links { 
+                display: none; flex-direction: column; position: absolute; 
+                top: 100%; left: 0; width: 100%; background: #151515; 
+                padding: 20px; border-bottom: 1px solid #333; 
+            }
+            .nav-links.active { display: flex; }
+            .nav-links li { margin: 15px 0; margin-left: 0; text-align: center; }
+            .btn { width: 100%; }
+            .section { padding: 60px 5%; }
+        }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo-text">OSH QRD Studio</div>
+        <div class="logo-text" onclick="window.scrollTo(0,0)">OSH QRD Studio</div>
         <div class="nav-controls">
-            <button class="lang-switch" onclick="toggleLang()">PL / EN</button>
+            <button class="lang-switch" onclick="toggleLang()">EN / PL</button>
             <button id="userBtn" class="lang-switch" onclick="toggleAuthModal()"><i class="fas fa-user"></i></button>
+            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#home" class="lang" data-en="Start" data-pl="Start">Start</a></li>
-            <li><a href="#contact" class="lang" data-en="Contact" data-pl="Kontakt">Contact</a></li>
+            <li><a href="#home" onclick="closeMenu()" class="lang" data-en="Start" data-pl="Start">Start</a></li>
+            <li><a href="#about" onclick="closeMenu()" class="lang" data-en="About" data-pl="O mnie">About</a></li>
+            <li><a href="#portfolio" onclick="closeMenu()" class="lang" data-en="Portfolio" data-pl="Portfolio">Portfolio</a></li>
+            <li><a href="#contact" onclick="closeMenu()" class="lang" data-en="Contact" data-pl="Kontakt">Contact</a></li>
         </ul>
     </nav>
 
     <div id="authModal">
         <div class="card">
             <i class="fas fa-times" onclick="toggleAuthModal()" style="position:absolute; top:15px; right:15px; cursor:pointer; color: var(--primary);"></i>
-            <h3 id="modalTitle" style="margin-bottom:20px; text-align: center;">Logowanie</h3>
-            
+            <h3 id="modalTitle" style="margin-bottom:20px;" class="lang" data-en="Login" data-pl="Logowanie">Login</h3>
             <div id="authForm">
                 <input type="email" id="authEmail" placeholder="Email">
-                <input type="password" id="authPassword" placeholder="Hasło">
-                <button class="btn btn-primary" onclick="handleAuth()" id="mainAuthBtn">Zaloguj się</button>
-                
-                <button class="btn btn-google" onclick="handleGoogleLogin()">
-                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google
-                </button>
-
-                <div class="auth-footer">
-                    <p id="toggleText">Nie masz konta? <span onclick="toggleAuthMode()">Zarejestruj</span></p>
-                    <span onclick="handleResetPassword()">Reset hasła</span>
+                <input type="password" id="authPassword" placeholder="Password">
+                <div class="auth-btn-group">
+                    <button class="btn btn-primary lang" data-en="Login" data-pl="Zaloguj się" onclick="handleAuth()" id="mainAuthBtn">Login</button>
+                    <button class="btn btn-google" onclick="handleGoogleLogin()">
+                        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google
+                    </button>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                    <p onclick="toggleAuthMode()" id="toggleText" class="lang" data-en="Create account" data-pl="Załóż konto" style="cursor:pointer; color:var(--text-muted);">Create account</p>
+                    <p onclick="handleResetPassword()" class="lang" data-en="Reset password" data-pl="Reset hasła" style="cursor:pointer; color:var(--primary);">Reset password</p>
                 </div>
             </div>
-            
-            <div id="userInfo" style="display:none; text-align: center;">
+            <div id="userInfo" style="display:none;">
                 <p id="userDisplay" style="margin-bottom:20px; font-weight: bold;"></p>
-                <button class="btn btn-primary" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);" onclick="handleLogout()">Wyloguj się</button>
+                <button class="btn btn-secondary lang" data-en="Logout" data-pl="Wyloguj się" onclick="handleLogout()">Logout</button>
             </div>
         </div>
     </div>
 
     <section class="hero" id="home">
         <img src="logo.png" alt="Logo">
-        <h1>CYFROWE ŚWIATY <span class="highlight">W TWOIM ZASIĘGU</span></h1>
-        <p>Game Developer | 3D Artist | 3D Printing</p>
+        <h1 class="lang" data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" data-pl="CYFROWE ŚWIATY <span class='highlight'>W TWOIM ZASIĘGU</span>">DIGITAL WORLDS <span class="highlight">WITHIN YOUR REACH</span></h1>
+        <p class="lang" data-en="Game Developer | 3D Artist | 3D Printing" data-pl="Twórca Gier | Grafik 3D | Wydruki 3D">Game Developer | 3D Artist | 3D Printing</p>
     </section>
+
+    <section class="section" id="about">
+        <h2 class="section-title lang" data-en="What do <span class='highlight'>I do?</span>" data-pl="Czym się <span class='highlight'>zajmuję?</span>">What do <span class="highlight">I do?</span></h2>
+        <div class="grid">
+            <div class="card">
+                <i class="fas fa-gamepad"></i>
+                <h3 class="lang" data-en="Gamedev" data-pl="Gamedev">Gamedev</h3>
+                <p class="lang" data-en="I create games for PC and Android." data-pl="Tworzę gry na platformy PC oraz Android.">I create games for PC and Android.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-cube"></i>
+                <h3 class="lang" data-en="3D Models" data-pl="Modele 3D">3D Models</h3>
+                <p class="lang" data-en="I prepare optimized 3D assets." data-pl="Przygotowuję optymalizowane assety 3D.">I prepare optimized 3D assets.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-print"></i>
+                <h3 class="lang" data-en="3D Printing" data-pl="Druk 3D">3D Printing</h3>
+                <p class="lang" data-en="I design print-ready files." data-pl="Projektuję pliki gotowe do druku.">I design print-ready files.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="portfolio" style="background: #141414;">
+        <h2 class="section-title lang" data-en="My <span class='highlight'>Portfolio</span>" data-pl="Moje <span class='highlight'>Portfolio</span>">My <span class="highlight">Portfolio</span></h2>
+        <div class="portfolio-btns">
+            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-primary" target="_blank">Google Play</a>
+            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank">Itch.io</a>
+            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank">ArtStation</a>
+        </div>
+    </section>
+
+    <section class="section" id="contact">
+        <h2 class="section-title lang" data-en="Get in <span class='highlight'>Touch</span>" data-pl="Zostańmy w <span class='highlight'>Kontakcie</span>">Get in <span class="highlight">Touch</span></h2>
+        <div class="contact-box">
+            <div class="contact-align">
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <a href="mailto:oshqrd@gmail.com">oshqrd@gmail.com</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-discord"></i>
+                    <a href="#" class="discord-tag">oshq</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 OSH QRD Studio. All rights reserved.</p>
+        <div class="social-footer">
+            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" target="_blank"><i class="fab fa-google-play"></i></a>
+            <a href="http://oshq.itch.io" target="_blank"><i class="fab fa-itch-io"></i></a>
+            <a href="https://oshq.artstation.com" target="_blank"><i class="fab fa-artstation"></i></a>
+        </div>
+    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { 
-            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
-            sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, 
-            onAuthStateChanged, signOut 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAnEOlk-g8nFBbBKU7hp7aEbIq8u2NBGxI",
@@ -109,37 +211,39 @@
             projectId: "oqstudiopage",
             storageBucket: "oqstudiopage.firebasestorage.app",
             messagingSenderId: "1036616830810",
-            appId: "1:1036616830810:web:6a7cfcde0e6a80454d2d63",
-            measurementId: "G-KC5B8K4HPJ"
+            appId: "1:1036616830810:web:6a7cfcde0e6a80454d2d63"
         };
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        window.currentLang = 'en';
         let isLoginMode = true;
 
         window.toggleAuthModal = () => {
-            const modal = document.getElementById('authModal');
-            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+            const m = document.getElementById('authModal');
+            m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
         };
 
         window.toggleAuthMode = () => {
             isLoginMode = !isLoginMode;
-            document.getElementById('modalTitle').innerText = isLoginMode ? "Logowanie" : "Rejestracja";
-            document.getElementById('mainAuthBtn').innerText = isLoginMode ? "Zaloguj się" : "Zarejestruj się";
-            document.getElementById('toggleText').innerHTML = isLoginMode ? 'Nie masz konta? <span onclick="toggleAuthMode()">Zarejestruj</span>' : 'Masz konto? <span onclick="toggleAuthMode()">Zaloguj</span>';
+            const title = document.getElementById('modalTitle');
+            const btn = document.getElementById('mainAuthBtn');
+            const text = document.getElementById('toggleText');
+            
+            title.innerText = isLoginMode ? (currentLang === 'en' ? "Login" : "Logowanie") : (currentLang === 'en' ? "Register" : "Rejestracja");
+            btn.innerText = isLoginMode ? (currentLang === 'en' ? "Login" : "Zaloguj się") : (currentLang === 'en' ? "Sign Up" : "Zarejestruj się");
+            text.innerText = isLoginMode ? (currentLang === 'en' ? "Create account" : "Załóż konto") : (currentLang === 'en' ? "I have an account" : "Mam już konto");
         };
 
         window.handleAuth = () => {
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
-            if(!email || !pass) return alert("Wpisz dane");
-
-            if(isLoginMode) {
+            if (isLoginMode) {
                 signInWithEmailAndPassword(auth, email, pass).then(() => toggleAuthModal()).catch(err => alert(err.message));
             } else {
-                createUserWithEmailAndPassword(auth, email, pass).then(() => { alert("Konto stworzone!"); toggleAuthMode(); }).catch(err => alert(err.message));
+                createUserWithEmailAndPassword(auth, email, pass).then(() => toggleAuthMode()).catch(err => alert(err.message));
             }
         };
 
@@ -149,38 +253,46 @@
 
         window.handleResetPassword = () => {
             const email = document.getElementById('authEmail').value;
-            if(!email) return alert("Wpisz email");
-            sendPasswordResetEmail(auth, email).then(() => alert("Email wysłany!")).catch(err => alert(err.message));
+            if(!email) return alert("Enter email first");
+            sendPasswordResetEmail(auth, email).then(() => alert("Reset link sent")).catch(err => alert(err.message));
         };
 
-        window.handleLogout = () => { signOut(auth).then(() => location.reload()); };
+        window.handleLogout = () => signOut(auth).then(() => location.reload());
 
         onAuthStateChanged(auth, (user) => {
             const form = document.getElementById('authForm');
             const info = document.getElementById('userInfo');
             const navLinks = document.getElementById('navLinks');
-            const userBtn = document.getElementById('userBtn');
-
             if (user) {
-                form.style.display = 'none';
-                info.style.display = 'block';
+                form.style.display = 'none'; info.style.display = 'block';
                 document.getElementById('userDisplay').innerText = user.email;
-                userBtn.style.color = '#ff8c00';
-
                 if (!document.getElementById('serviceLink')) {
-                    const li = document.createElement('li');
-                    li.id = 'serviceLink';
-                    li.innerHTML = '<a href="3dprint.html" style="color: #ff8c00; font-weight: bold;">DRUK 3D</a>';
+                    const li = document.createElement('li'); li.id = 'serviceLink';
+                    li.innerHTML = `<a href="3dprint.html" onclick="closeMenu()" style="color:var(--primary); font-weight:bold;">${currentLang === 'en' ? '3D PRINT' : 'DRUK 3D'}</a>`;
                     navLinks.appendChild(li);
                 }
             } else {
-                form.style.display = 'block';
-                info.style.display = 'none';
-                userBtn.style.color = 'white';
-                const link = document.getElementById('serviceLink');
-                if (link) link.remove();
+                form.style.display = 'block'; info.style.display = 'none';
+                if (document.getElementById('serviceLink')) document.getElementById('serviceLink').remove();
             }
         });
+
+        window.toggleLang = function() {
+            currentLang = currentLang === 'en' ? 'pl' : 'en';
+            document.querySelectorAll('.lang').forEach(el => {
+                el.innerHTML = el.getAttribute(`data-${currentLang}`);
+            });
+            const serviceLink = document.querySelector('#serviceLink a');
+            if(serviceLink) serviceLink.innerText = currentLang === 'en' ? '3D PRINT' : 'DRUK 3D';
+            
+            const modalTitle = document.getElementById('modalTitle');
+            if(modalTitle) {
+                modalTitle.innerText = isLoginMode ? (currentLang === 'en' ? "Login" : "Logowanie") : (currentLang === 'en' ? "Register" : "Rejestracja");
+            }
+        };
+
+        window.toggleMenu = () => document.getElementById('navLinks').classList.toggle('active');
+        window.closeMenu = () => document.getElementById('navLinks').classList.remove('active');
     </script>
 </body>
 </html>
