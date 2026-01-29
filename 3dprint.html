@@ -15,158 +15,160 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-top: 80px; } /* padding-top dodany przez menu */
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-top: 80px; }
 
-        /* STYLE NAWIGACJI (identyczne jak w index.html) */
+        /* Menu górne */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 10%; background: rgba(15, 15, 15, 0.98);
             position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333;
         }
-        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-controls { display: flex; align-items: center; gap: 15px; }
         .lang-switch {
             background: transparent; border: 1px solid var(--primary); color: var(--primary);
             padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem;
         }
 
-        /* STYLE KALKULATORA I LISTY */
+        /* Kontener główny - domyślnie ukryty do czasu zalogowania */
+        #mainContent { display: none; }
         .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 10px; }
-        #adminPanel { display: none; }
 
+        /* Karty i Formularze */
         .card {
-            background: var(--card-bg); padding: 20px; border-radius: 15px;
-            border: 1px solid #333; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            margin-bottom: 20px;
+            background: var(--card-bg); padding: 20px; border-radius: 12px;
+            border: 1px solid #333; margin-bottom: 20px;
         }
-
-        h2, h3 { color: var(--primary); text-align: center; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
-
-        .group-box {
-            background: rgba(255, 140, 0, 0.03); padding: 15px;
-            border-radius: 10px; border: 1px solid #333; margin-bottom: 15px;
-        }
-
-        .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-end; }
-        .row div { flex: 1; min-width: 0; }
-
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 11px; color: var(--primary); text-transform: uppercase; }
-        
         input {
-            width: 100%; padding: 12px; background: var(--input-bg);
-            border: 1px solid #444; color: white; border-radius: 8px;
-            font-size: 15px; box-sizing: border-box;
+            width: 100%; padding: 12px; margin-bottom: 15px; background: var(--input-bg);
+            border: 1px solid #444; color: white; border-radius: 8px; font-size: 14px;
         }
-        input:focus { border-color: var(--primary); outline: none; background: #2a2a2a; }
-
-        .result-zone {
-            background: var(--primary); color: #000; padding: 15px;
-            border-radius: 10px; text-align: center; margin-top: 15px;
-        }
-        .total-val { font-size: 32px; font-weight: 900; }
-        
         .btn-action {
             width: 100%; background: var(--primary); color: black;
-            border: none; padding: 15px; border-radius: 8px;
-            font-weight: bold; font-size: 16px; cursor: pointer;
-            margin-top: 10px; text-transform: uppercase;
+            border: none; padding: 14px; border-radius: 8px;
+            font-weight: bold; cursor: pointer; text-transform: uppercase;
         }
 
-        .client-group { background: #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-        .client-header {
-            background: #2a2a2a; padding: 12px 15px;
-            display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer;
+        /* MODAL LOGOWANIA - Zawsze widoczny jeśli niezalogowany */
+        #authOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 3000;
+            display: flex; justify-content: center; align-items: center; padding: 20px;
         }
-        .client-header h4 { margin: 0; color: var(--primary); font-size: 14px; }
+        .auth-card { max-width: 380px; width: 100%; }
+        .google-btn { background: white; color: #444; margin-top: 10px; }
+
+        /* Reszta stylów (kalkulator, statusy itp.) */
+        #adminPanel { display: none; }
+        .group-box { background: rgba(255, 140, 0, 0.03); padding: 15px; border-radius: 10px; border: 1px solid #333; margin-bottom: 15px; }
+        .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-end; }
+        .row div { flex: 1; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 11px; color: var(--primary); text-transform: uppercase; }
+        .result-zone { background: var(--primary); color: #000; padding: 15px; border-radius: 10px; text-align: center; }
+        .total-val { font-size: 32px; font-weight: 900; }
+        .client-group { background: #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
+        .client-header { background: #2a2a2a; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
         .client-content { display: none; padding: 10px; background: #1a1a1a; }
         .client-content.active { display: block; }
-
+        .status-badge { padding: 2px 5px; border-radius: 3px; font-size: 10px; font-weight: bold; }
+        .unpaid { background: #ff4444; } .paid { background: #00c851; }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
         td, th { padding: 8px; text-align: left; border-bottom: 1px solid #333; }
-        
-        .status-badge { padding: 2px 5px; border-radius: 3px; font-size: 10px; font-weight: bold; }
-        .unpaid { background: #ff4444; color: white; }
-        .paid { background: #00c851; color: white; }
 
-        /* MODAL WYLOGOWANIA (uproszczony dla 3dprint) */
-        #authModal {
-            display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
-            background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center;
-        }
+        /* Modal profilu po zalogowaniu */
+        #profileModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; }
     </style>
 </head>
 <body>
 
+    <div id="authOverlay">
+        <div class="card auth-card">
+            <h3 style="margin-bottom: 20px; text-align: center;">Zaloguj się, aby zobaczyć wydruki</h3>
+            <div id="authForm">
+                <input type="email" id="authEmail" placeholder="Email">
+                <input type="password" id="authPassword" placeholder="Hasło">
+                <button class="btn-action" onclick="handleAuth()">Zaloguj się</button>
+                <button class="btn-action google-btn" onclick="handleGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="vertical-align: middle; margin-right: 8px;"> Kontynuuj z Google
+                </button>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 15px;">
+                    <p style="color:var(--text-muted); cursor:pointer;" onclick="handleResetPassword()">Zapomniałem hasła</p>
+                    <p style="color:var(--primary); cursor:pointer;" onclick="window.location.href='index.html'">Wróć do strony głównej</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <nav>
-        <div class="logo-text" onclick="window.location.href='index.html'" style="cursor:pointer;">OSH QRD Studio</div>
+        <div class="logo-text" onclick="window.location.href='index.html'">OSH QRD Studio</div>
         <div class="nav-controls">
-            <button class="lang-switch" onclick="window.location.href='index.html'">POWRÓT</button>
-            <button id="userBtn" class="lang-switch" onclick="toggleAuthModal()"><i class="fas fa-user"></i></button>
+            <button id="userBtn" class="lang-switch" onclick="toggleProfileModal()"><i class="fas fa-user"></i></button>
         </div>
     </nav>
 
-    <div id="authModal">
-        <div class="card" style="max-width:350px;">
-            <i class="fas fa-times" onclick="toggleAuthModal()" style="float:right; cursor:pointer; color:var(--primary);"></i>
+    <div id="profileModal">
+        <div class="card" style="max-width:350px; width: 90%;">
+            <i class="fas fa-times" onclick="toggleProfileModal()" style="float:right; cursor:pointer; color:var(--primary);"></i>
             <h3 style="margin-top:20px;">Twój Profil</h3>
-            <p id="userEmailDisplay" style="text-align:center; margin-bottom:20px; font-size:0.9rem;"></p>
+            <p id="userEmailDisplay" style="text-align:center; margin: 20px 0; font-size:0.9rem;"></p>
             <button class="btn-action" onclick="handleLogout()">Wyloguj się</button>
         </div>
     </div>
 
-    <div class="container">
-        <div id="adminPanel">
-            <div class="card">
-                <h2>Kalkulator Admina</h2>
-                <div class="group-box" style="border-color: var(--primary); border-style: dashed;">
-                    <label>Czas pracy:</label>
-                    <div class="row">
-                        <div><label>Bambu</label><input type="number" id="decHours" step="0.01" oninput="syncFromDecimal()"></div>
-                        <div><label>h</label><input type="number" id="hPart" oninput="syncFromHM()"></div>
-                        <div><label>min</label><input type="number" id="mPart" oninput="syncFromHM()"></div>
+    <div id="mainContent">
+        <div class="container">
+            <div id="adminPanel">
+                <div class="card">
+                    <h2>Kalkulator Admina</h2>
+                    <div class="group-box" style="border-color: var(--primary); border-style: dashed;">
+                        <label>Czas pracy:</label>
+                        <div class="row">
+                            <div><label>Dziesiętnie</label><input type="number" id="decHours" step="0.01" oninput="syncFromDecimal()"></div>
+                            <div><label>h</label><input type="number" id="hPart" oninput="syncFromHM()"></div>
+                            <div><label>min</label><input type="number" id="mPart" oninput="syncFromHM()"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="group-box">
-                    <div class="row">
-                        <div><label>Waga (g):</label><input type="number" id="weight" oninput="calculate()"></div>
-                        <div><label>Filament (zł/kg):</label><input type="number" id="pricePerKg" value="60" oninput="calculate()"></div>
+                    <div class="group-box">
+                        <div class="row">
+                            <div><label>Waga (g):</label><input type="number" id="weight" oninput="calculate()"></div>
+                            <div><label>Filament (zł/kg):</label><input type="number" id="pricePerKg" value="60" oninput="calculate()"></div>
+                        </div>
                     </div>
-                </div>
-                <div class="group-box">
-                    <div class="row">
-                        <div><label>Amortyzacja (zł/h):</label><input type="number" id="amortRate" value="3.00" oninput="calculate()"></div>
-                        <div><label>Moc (W):</label><input type="number" id="powerW" value="50" oninput="calculate()"></div>
+                    <div class="group-box">
+                        <div class="row">
+                            <div><label>Amortyzacja (zł/h):</label><input type="number" id="amortRate" value="3.00" oninput="calculate()"></div>
+                            <div><label>Moc (W):</label><input type="number" id="powerW" value="50" oninput="calculate()"></div>
+                        </div>
+                        <div class="row">
+                            <div><label>Prąd (zł/kWh):</label><input type="number" id="energyPrice" value="0.90" oninput="calculate()"></div>
+                            <div><label>Robocizna (zł):</label><input type="number" id="labor" value="0" oninput="calculate()"></div>
+                        </div>
                     </div>
-                    <div class="row">
-                        <div><label>Prąd (zł/kWh):</label><input type="number" id="energyPrice" value="0.90" oninput="calculate()"></div>
-                        <div><label>Robocizna (zł):</label><input type="number" id="labor" value="0" oninput="calculate()"></div>
+                    <div class="group-box" style="border-color: #555;">
+                        <label>Dane Klienta:</label>
+                        <input type="text" id="clientName" placeholder="Imię i Nazwisko" style="margin-bottom:10px;">
+                        <input type="email" id="clientEmail" placeholder="E-mail klienta">
+                        <input type="text" id="printTitle" placeholder="Tytuł wydruku" style="margin-top:10px;">
                     </div>
+                    <div class="result-zone">
+                        <div class="total-val"><span id="totalPrice">0.00</span> zł</div>
+                        <div id="details" style="font-size: 9px; margin-top: 5px;"></div>
+                    </div>
+                    <button class="btn-action" onclick="saveToFirebase()">Zapisz zamówienie</button>
                 </div>
-                <div class="group-box" style="border-color: #555;">
-                    <label>Dane Klienta:</label>
-                    <input type="text" id="clientName" placeholder="Imię i Nazwisko" style="margin-bottom:10px;">
-                    <input type="email" id="clientEmail" placeholder="E-mail klienta">
-                    <input type="text" id="printTitle" placeholder="Tytuł wydruku" style="margin-top:10px;">
-                </div>
-                <div class="result-zone">
-                    <div class="total-val"><span id="totalPrice">0.00</span> zł</div>
-                    <div id="details" style="font-size: 9px; margin-top: 5px;"></div>
-                </div>
-                <button class="btn-action" onclick="saveToFirebase()">Zapisz i udostępnij</button>
             </div>
-        </div>
 
-        <div id="ordersContainer">
-            <h3 id="listTitle">Historia Zamówień</h3>
-            <div id="clientsList"></div>
+            <div id="ordersContainer">
+                <h3 id="listTitle" style="margin-bottom: 20px;">Twoje Wydruki</h3>
+                <div id="clientsList"></div>
+            </div>
         </div>
     </div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getAuth, onAuthStateChanged, signOut, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAnEOlk-g8nFBbBKU7hp7aEbIq8u2NBGxI",
@@ -180,51 +182,70 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
     const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
 
     let openClients = new Set();
     const ADMIN_EMAIL = "pioosz2@gmail.com";
 
     onAuthStateChanged(auth, (user) => {
-        if (!user) { window.location.href = "index.html"; return; }
-        
-        document.getElementById('userEmailDisplay').innerText = user.email;
-        const isAdmin = (user.email === ADMIN_EMAIL);
-        
-        if (isAdmin) {
-            document.getElementById('adminPanel').style.display = 'block';
-            loadOrders(true, user.email);
+        if (user) {
+            // ZALOGOWANY
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('mainContent').style.display = 'block';
+            document.getElementById('userEmailDisplay').innerText = user.email;
+
+            if (user.email === ADMIN_EMAIL) {
+                document.getElementById('adminPanel').style.display = 'block';
+                document.getElementById('listTitle').innerText = "Wszystkie Zamówienia (Admin)";
+                loadOrders(true, user.email);
+            } else {
+                loadOrders(false, user.email);
+            }
         } else {
-            const panel = document.getElementById('adminPanel');
-            if(panel) panel.remove();
-            loadOrders(false, user.email);
+            // NIEZALOGOWANY
+            document.getElementById('authOverlay').style.display = 'flex';
+            document.getElementById('mainContent').style.display = 'none';
         }
     });
 
-    // FUNKCJE OBSŁUGI PROFILU
-    window.toggleAuthModal = () => {
-        const modal = document.getElementById('authModal');
-        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    // LOGIKA AUTORYZACJI
+    window.handleAuth = () => {
+        const email = document.getElementById('authEmail').value;
+        const pass = document.getElementById('authPassword').value;
+        signInWithEmailAndPassword(auth, email, pass).catch(err => alert("Błąd: " + err.message));
     };
 
-    window.handleLogout = () => {
-        signOut(auth).then(() => { window.location.href = "index.html"; });
+    window.handleGoogleLogin = () => {
+        signInWithPopup(auth, provider).catch(err => alert("Błąd Google: " + err.message));
     };
 
-    // ŁADOWANIE ZAMÓWIEŃ
+    window.handleResetPassword = () => {
+        const email = document.getElementById('authEmail').value;
+        if(!email) return alert("Wpisz email!");
+        sendPasswordResetEmail(auth, email).then(() => alert("Link wysłany!")).catch(err => alert(err.message));
+    };
+
+    window.handleLogout = () => signOut(auth).then(() => location.reload());
+    window.toggleProfileModal = () => {
+        const m = document.getElementById('profileModal');
+        m.style.display = m.style.display === 'flex' ? 'none' : 'flex';
+    };
+
+    // POBIERANIE DANYCH
     function loadOrders(isAdmin, userEmail) {
-        const emailToFilter = userEmail.toLowerCase();
+        const emailFilter = userEmail.toLowerCase();
         let q = isAdmin ? 
             query(collection(db, "orders"), orderBy("createdAt", "desc")) : 
-            query(collection(db, "orders"), where("clientEmail", "==", emailToFilter), orderBy("createdAt", "desc"));
+            query(collection(db, "orders"), where("clientEmail", "==", emailFilter), orderBy("createdAt", "desc"));
 
         onSnapshot(q, (snapshot) => {
-            const clientsList = document.getElementById('clientsList');
-            clientsList.innerHTML = "";
+            const list = document.getElementById('clientsList');
+            list.innerHTML = "";
             const groups = {};
 
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
-                const groupKey = isAdmin ? data.clientName : "Moje Wydruki";
+                const groupKey = isAdmin ? data.clientName : "Moje Zamówienia";
                 if(!groups[groupKey]) groups[groupKey] = { orders: [], unpaidTotal: 0, email: data.clientEmail };
                 groups[groupKey].orders.push({ id: docSnap.id, ...data });
                 if(!data.paid) groups[groupKey].unpaidTotal += data.price;
@@ -261,46 +282,40 @@
                         </table>
                     </div>
                 `;
-                clientsList.appendChild(clientDiv);
+                list.appendChild(clientDiv);
             }
         });
     }
 
-    // KALKULATOR
+    // RESZTA FUNKCJI (SYNC/CALC/SAVE)
     window.syncFromDecimal = () => {
         const dec = parseFloat(document.getElementById('decHours').value) || 0;
-        const h = Math.floor(dec);
-        const m = Math.round((dec - h) * 60);
-        document.getElementById('hPart').value = h || '';
-        document.getElementById('mPart').value = m || '';
+        document.getElementById('hPart').value = Math.floor(dec) || '';
+        document.getElementById('mPart').value = Math.round((dec % 1) * 60) || '';
         calculate();
     };
     window.syncFromHM = () => {
         const h = parseInt(document.getElementById('hPart').value) || 0;
         const m = parseInt(document.getElementById('mPart').value) || 0;
-        const val = (h + m/60);
-        document.getElementById('decHours').value = val > 0 ? val.toFixed(2) : '';
+        document.getElementById('decHours').value = (h + m/60).toFixed(2);
         calculate();
     };
     window.calculate = () => {
-        const decHours = parseFloat(document.getElementById('decHours').value) || 0;
+        const hours = parseFloat(document.getElementById('decHours').value) || 0;
         const weight = parseFloat(document.getElementById('weight').value) || 0;
-        const pricePerKg = parseFloat(document.getElementById('pricePerKg').value) || 0;
-        const amortRate = parseFloat(document.getElementById('amortRate').value) || 0;
-        const labor = parseFloat(document.getElementById('labor').value) || 0;
+        const priceKg = parseFloat(document.getElementById('pricePerKg').value) || 0;
+        const amort = parseFloat(document.getElementById('amortRate').value) || 0;
         const power = parseFloat(document.getElementById('powerW').value) || 0;
-        const energyPrice = parseFloat(document.getElementById('energyPrice').value) || 0;
-
-        const matCost = (pricePerKg / 1000) * weight;
-        const energyCost = (decHours * (power / 1000)) * energyPrice;
-        const amortCost = decHours * amortRate;
-        const total = matCost + energyCost + amortCost + labor;
-
+        const energy = parseFloat(document.getElementById('energyPrice').value) || 0;
+        const labor = parseFloat(document.getElementById('labor').value) || 0;
+        const mat = (priceKg / 1000) * weight;
+        const elec = (hours * (power / 1000)) * energy;
+        const amCost = hours * amort;
+        const total = mat + elec + amCost + labor;
         document.getElementById('totalPrice').innerText = total.toFixed(2);
-        document.getElementById('details').innerText = `MAT: ${matCost.toFixed(2)}zł | PRĄD: ${energyCost.toFixed(2)}zł | AMORT: ${amortCost.toFixed(2)}zł`;
+        document.getElementById('details').innerText = `MAT: ${mat.toFixed(2)}zł | PRĄD: ${elec.toFixed(2)}zł | AMORT: ${amCost.toFixed(2)}zł`;
         return total;
     };
-
     window.saveToFirebase = async () => {
         const client = document.getElementById('clientName').value.trim();
         const email = document.getElementById('clientEmail').value.trim().toLowerCase();
@@ -313,7 +328,6 @@
         });
         document.getElementById('printTitle').value = "";
     };
-
     window.toggleClientView = (name) => {
         if (openClients.has(name)) openClients.delete(name); else openClients.add(name);
         document.querySelectorAll('.client-group').forEach(g => {
