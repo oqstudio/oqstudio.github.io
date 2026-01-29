@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Druku 3D | OSH QRD Studio</title>
+    <title>Zamówienia 3D | OSH QRD Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -14,15 +14,25 @@
             --input-bg: #222;
         }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            display: flex; flex-direction: column; align-items: center;
-            padding: 10px; margin: 0;
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-top: 80px; } /* padding-top dodany przez menu */
+
+        /* STYLE NAWIGACJI (identyczne jak w index.html) */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 10%; background: rgba(15, 15, 15, 0.98);
+            position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333;
+        }
+        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; }
+        .nav-controls { display: flex; align-items: center; gap: 15px; }
+        .lang-switch {
+            background: transparent; border: 1px solid var(--primary); color: var(--primary);
+            padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem;
         }
 
-        .container { width: 100%; max-width: 600px; }
+        /* STYLE KALKULATORA I LISTY */
+        .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 10px; }
+        #adminPanel { display: none; }
 
         .card {
             background: var(--card-bg); padding: 20px; border-radius: 15px;
@@ -47,14 +57,12 @@
             border: 1px solid #444; color: white; border-radius: 8px;
             font-size: 15px; box-sizing: border-box;
         }
-
         input:focus { border-color: var(--primary); outline: none; background: #2a2a2a; }
 
         .result-zone {
             background: var(--primary); color: #000; padding: 15px;
             border-radius: 10px; text-align: center; margin-top: 15px;
         }
-
         .total-val { font-size: 32px; font-weight: 900; }
         
         .btn-action {
@@ -64,129 +72,101 @@
             margin-top: 10px; text-transform: uppercase;
         }
 
-        /* Sekcja Klientów */
         .client-group { background: #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-
         .client-header {
             background: #2a2a2a; padding: 12px 15px;
             display: flex; justify-content: space-between; align-items: center;
-            cursor: pointer; transition: 0.3s;
+            cursor: pointer;
         }
-
-        .client-header:hover { background: #333; }
         .client-header h4 { margin: 0; color: var(--primary); font-size: 14px; }
-
         .client-content { display: none; padding: 10px; background: #1a1a1a; }
         .client-content.active { display: block; }
 
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
         td, th { padding: 8px; text-align: left; border-bottom: 1px solid #333; }
-        th { color: #888; font-size: 11px; }
-
+        
         .status-badge { padding: 2px 5px; border-radius: 3px; font-size: 10px; font-weight: bold; }
         .unpaid { background: #ff4444; color: white; }
         .paid { background: #00c851; color: white; }
 
-        .back-link { align-self: flex-start; color: var(--primary); text-decoration: none; margin-bottom: 10px; font-size: 13px; }
-        small { color: #888; display: block; margin-top: 2px; font-size: 9px; }
+        /* MODAL WYLOGOWANIA (uproszczony dla 3dprint) */
+        #authModal {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%; 
+            background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center;
+        }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> Powrót do strony głównej</a>
-
-    <div class="card">
-        <h2>Wycena Wydruku</h2>
-        
-        <div class="group-box" style="border-color: var(--primary); border-style: dashed;">
-            <label><i class="fas fa-clock"></i> Czas pracy (Sync):</label>
-            <div class="row">
-                <div>
-                    <label style="color: #888; font-size: 9px;">Format Bambu</label>
-                    <input type="number" id="decHours" step="0.01" placeholder="0.00" oninput="syncFromDecimal()">
-                </div>
-                <div>
-                    <label style="color: #888; font-size: 9px;">Godziny</label>
-                    <input type="number" id="hPart" placeholder="h" oninput="syncFromHM()">
-                </div>
-                <div>
-                    <label style="color: #888; font-size: 9px;">Minuty</label>
-                    <input type="number" id="mPart" placeholder="min" oninput="syncFromHM()">
-                </div>
-            </div>
+    <nav>
+        <div class="logo-text" onclick="window.location.href='index.html'" style="cursor:pointer;">OSH QRD Studio</div>
+        <div class="nav-controls">
+            <button class="lang-switch" onclick="window.location.href='index.html'">POWRÓT</button>
+            <button id="userBtn" class="lang-switch" onclick="toggleAuthModal()"><i class="fas fa-user"></i></button>
         </div>
+    </nav>
 
-        <div class="group-box">
-            <div class="row">
-                <div>
-                    <label>Waga (g):</label>
-                    <input type="number" id="weight" placeholder="0" oninput="calculate()">
-                </div>
-                <div>
-                    <label>Filament (zł/kg):</label>
-                    <input type="number" id="pricePerKg" value="60" oninput="calculate()">
-                </div>
-            </div>
+    <div id="authModal">
+        <div class="card" style="max-width:350px;">
+            <i class="fas fa-times" onclick="toggleAuthModal()" style="float:right; cursor:pointer; color:var(--primary);"></i>
+            <h3 style="margin-top:20px;">Twój Profil</h3>
+            <p id="userEmailDisplay" style="text-align:center; margin-bottom:20px; font-size:0.9rem;"></p>
+            <button class="btn-action" onclick="handleLogout()">Wyloguj się</button>
         </div>
-
-        <div class="group-box">
-            <div class="row">
-                <div>
-                    <label>Amortyzacja (zł/h):</label>
-                    <input type="number" id="amortRate" value="3.00" oninput="calculate()">
-                    <small>Z Twojego oryginału</small>
-                </div>
-                <div>
-                    <label>Moc (W):</label>
-                    <input type="number" id="powerW" value="50" oninput="calculate()">
-                    <small>Bambu A1 Mini</small>
-                </div>
-            </div>
-            <div class="row" style="margin-top: 10px;">
-                <div>
-                    <label>Cena prądu (zł/kWh):</label>
-                    <input type="number" id="energyPrice" value="0.90" oninput="calculate()">
-                </div>
-                <div>
-                    <label>Robocizna / Inne (zł):</label>
-                    <input type="number" id="labor" value="0" oninput="calculate()">
-                </div>
-            </div>
-        </div>
-
-        <div class="group-box" style="border-color: #555;">
-            <div class="row">
-                <div>
-                    <label>Klient:</label>
-                    <input type="text" id="clientName" placeholder="Np. Jan Kowalski">
-                </div>
-                <div>
-                    <label>Tytuł wydruku:</label>
-                    <input type="text" id="printTitle" placeholder="Np. Figurka Smoka">
-                </div>
-            </div>
-        </div>
-
-        <div class="result-zone">
-            <div style="font-weight: bold; text-transform: uppercase; font-size: 11px;">Łączny koszt dla klienta</div>
-            <div class="total-val"><span id="totalPrice">0.00</span> zł</div>
-            <div id="details" style="font-size: 9px; margin-top: 5px; opacity: 0.8;"></div>
-        </div>
-
-        <button class="btn-action" onclick="saveToFirebase()"><i class="fas fa-save"></i> Zapisz zamówienie</button>
     </div>
 
-    <div id="ordersContainer" class="container" style="padding:0;">
-        <h3 style="margin-bottom: 10px;">Baza Zamówień (Klienci)</h3>
-        <div id="clientsList"></div>
+    <div class="container">
+        <div id="adminPanel">
+            <div class="card">
+                <h2>Kalkulator Admina</h2>
+                <div class="group-box" style="border-color: var(--primary); border-style: dashed;">
+                    <label>Czas pracy:</label>
+                    <div class="row">
+                        <div><label>Bambu</label><input type="number" id="decHours" step="0.01" oninput="syncFromDecimal()"></div>
+                        <div><label>h</label><input type="number" id="hPart" oninput="syncFromHM()"></div>
+                        <div><label>min</label><input type="number" id="mPart" oninput="syncFromHM()"></div>
+                    </div>
+                </div>
+                <div class="group-box">
+                    <div class="row">
+                        <div><label>Waga (g):</label><input type="number" id="weight" oninput="calculate()"></div>
+                        <div><label>Filament (zł/kg):</label><input type="number" id="pricePerKg" value="60" oninput="calculate()"></div>
+                    </div>
+                </div>
+                <div class="group-box">
+                    <div class="row">
+                        <div><label>Amortyzacja (zł/h):</label><input type="number" id="amortRate" value="3.00" oninput="calculate()"></div>
+                        <div><label>Moc (W):</label><input type="number" id="powerW" value="50" oninput="calculate()"></div>
+                    </div>
+                    <div class="row">
+                        <div><label>Prąd (zł/kWh):</label><input type="number" id="energyPrice" value="0.90" oninput="calculate()"></div>
+                        <div><label>Robocizna (zł):</label><input type="number" id="labor" value="0" oninput="calculate()"></div>
+                    </div>
+                </div>
+                <div class="group-box" style="border-color: #555;">
+                    <label>Dane Klienta:</label>
+                    <input type="text" id="clientName" placeholder="Imię i Nazwisko" style="margin-bottom:10px;">
+                    <input type="email" id="clientEmail" placeholder="E-mail klienta">
+                    <input type="text" id="printTitle" placeholder="Tytuł wydruku" style="margin-top:10px;">
+                </div>
+                <div class="result-zone">
+                    <div class="total-val"><span id="totalPrice">0.00</span> zł</div>
+                    <div id="details" style="font-size: 9px; margin-top: 5px;"></div>
+                </div>
+                <button class="btn-action" onclick="saveToFirebase()">Zapisz i udostępnij</button>
+            </div>
+        </div>
+
+        <div id="ordersContainer">
+            <h3 id="listTitle">Historia Zamówień</h3>
+            <div id="clientsList"></div>
+        </div>
     </div>
-</div>
 
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc, query, orderBy, where } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
     const firebaseConfig = {
         apiKey: "AIzaSyAnEOlk-g8nFBbBKU7hp7aEbIq8u2NBGxI",
@@ -201,13 +181,92 @@
     const db = getFirestore(app);
     const auth = getAuth(app);
 
-    // Zapamiętywanie otwartych okienek (używamy zestawu nazw klientów)
     let openClients = new Set();
+    const ADMIN_EMAIL = "pioosz2@gmail.com";
 
     onAuthStateChanged(auth, (user) => {
-        if (!user || user.email !== "pioosz2@gmail.com") window.location.href = "index.html";
+        if (!user) { window.location.href = "index.html"; return; }
+        
+        document.getElementById('userEmailDisplay').innerText = user.email;
+        const isAdmin = (user.email === ADMIN_EMAIL);
+        
+        if (isAdmin) {
+            document.getElementById('adminPanel').style.display = 'block';
+            loadOrders(true, user.email);
+        } else {
+            const panel = document.getElementById('adminPanel');
+            if(panel) panel.remove();
+            loadOrders(false, user.email);
+        }
     });
 
+    // FUNKCJE OBSŁUGI PROFILU
+    window.toggleAuthModal = () => {
+        const modal = document.getElementById('authModal');
+        modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
+    };
+
+    window.handleLogout = () => {
+        signOut(auth).then(() => { window.location.href = "index.html"; });
+    };
+
+    // ŁADOWANIE ZAMÓWIEŃ
+    function loadOrders(isAdmin, userEmail) {
+        const emailToFilter = userEmail.toLowerCase();
+        let q = isAdmin ? 
+            query(collection(db, "orders"), orderBy("createdAt", "desc")) : 
+            query(collection(db, "orders"), where("clientEmail", "==", emailToFilter), orderBy("createdAt", "desc"));
+
+        onSnapshot(q, (snapshot) => {
+            const clientsList = document.getElementById('clientsList');
+            clientsList.innerHTML = "";
+            const groups = {};
+
+            snapshot.forEach(docSnap => {
+                const data = docSnap.data();
+                const groupKey = isAdmin ? data.clientName : "Moje Wydruki";
+                if(!groups[groupKey]) groups[groupKey] = { orders: [], unpaidTotal: 0, email: data.clientEmail };
+                groups[groupKey].orders.push({ id: docSnap.id, ...data });
+                if(!data.paid) groups[groupKey].unpaidTotal += data.price;
+            });
+
+            for (const [name, info] of Object.entries(groups)) {
+                const isOpen = isAdmin ? openClients.has(name) : true;
+                const clientDiv = document.createElement('div');
+                clientDiv.className = 'client-group';
+                clientDiv.innerHTML = `
+                    <div class="client-header" onclick="toggleClientView('${name}')">
+                        <div>
+                            <h4><i class="fas fa-user"></i> ${name}</h4>
+                            ${isAdmin ? `<small style="color:#888;">${info.email}</small>` : ''}
+                        </div>
+                        <span style="font-weight:bold;">${info.unpaidTotal.toFixed(2)} zł</span>
+                    </div>
+                    <div class="client-content ${isOpen ? 'active' : ''}">
+                        <table>
+                            <thead><tr><th>Projekt</th><th>Cena</th><th>Status</th>${isAdmin ? '<th>Akcja</th>' : ''}</tr></thead>
+                            <tbody>
+                                ${info.orders.map(o => `
+                                    <tr>
+                                        <td>${o.printTitle}</td>
+                                        <td>${o.price.toFixed(2)} zł</td>
+                                        <td><span class="status-badge ${o.paid ? 'paid' : 'unpaid'}">${o.paid ? 'ZAPŁACONE' : 'NIEZAPŁACONE'}</span></td>
+                                        ${isAdmin ? `<td style="white-space:nowrap;">
+                                            <button onclick="togglePaid('${o.id}', ${o.paid})" style="background:none; border:none; color:var(--primary); cursor:pointer;"><i class="fas fa-check"></i></button>
+                                            <button onclick="deleteOrder('${o.id}')" style="background:none; border:none; color:#ff4444; cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
+                                        </td>` : ''}
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+                clientsList.appendChild(clientDiv);
+            }
+        });
+    }
+
+    // KALKULATOR
     window.syncFromDecimal = () => {
         const dec = parseFloat(document.getElementById('decHours').value) || 0;
         const h = Math.floor(dec);
@@ -216,15 +275,13 @@
         document.getElementById('mPart').value = m || '';
         calculate();
     };
-
     window.syncFromHM = () => {
         const h = parseInt(document.getElementById('hPart').value) || 0;
         const m = parseInt(document.getElementById('mPart').value) || 0;
-        const dec = h + (m / 60);
-        document.getElementById('decHours').value = dec > 0 ? dec.toFixed(2) : '';
+        const val = (h + m/60);
+        document.getElementById('decHours').value = val > 0 ? val.toFixed(2) : '';
         calculate();
     };
-
     window.calculate = () => {
         const decHours = parseFloat(document.getElementById('decHours').value) || 0;
         const weight = parseFloat(document.getElementById('weight').value) || 0;
@@ -234,109 +291,37 @@
         const power = parseFloat(document.getElementById('powerW').value) || 0;
         const energyPrice = parseFloat(document.getElementById('energyPrice').value) || 0;
 
-        const costMaterial = (pricePerKg / 1000) * weight;
-        const costEnergy = (decHours * (power / 1000)) * energyPrice;
-        const costAmort = decHours * amortRate;
-        const total = costMaterial + costEnergy + costAmort + labor;
+        const matCost = (pricePerKg / 1000) * weight;
+        const energyCost = (decHours * (power / 1000)) * energyPrice;
+        const amortCost = decHours * amortRate;
+        const total = matCost + energyCost + amortCost + labor;
 
         document.getElementById('totalPrice').innerText = total.toFixed(2);
-        document.getElementById('details').innerText = `MAT: ${costMaterial.toFixed(2)}zł | PRĄD: ${costEnergy.toFixed(2)}zł | AMORT: ${costAmort.toFixed(2)}zł | ROB: ${labor.toFixed(2)}zł`;
+        document.getElementById('details').innerText = `MAT: ${matCost.toFixed(2)}zł | PRĄD: ${energyCost.toFixed(2)}zł | AMORT: ${amortCost.toFixed(2)}zł`;
         return total;
     };
 
     window.saveToFirebase = async () => {
         const client = document.getElementById('clientName').value.trim();
+        const email = document.getElementById('clientEmail').value.trim().toLowerCase();
         const title = document.getElementById('printTitle').value.trim();
         const price = calculate();
-        if(!client || !title) return alert("Podaj klienta i tytuł!");
-
-        // Automatycznie otwórz okienko dla tego klienta po zapisie
+        if(!client || !email || !title) return alert("Uzupełnij wszystko!");
         openClients.add(client);
-
         await addDoc(collection(db, "orders"), {
-            clientName: client,
-            printTitle: title,
-            price: parseFloat(price),
-            paid: false,
-            createdAt: Date.now()
+            clientName: client, clientEmail: email, printTitle: title, price: parseFloat(price), paid: false, createdAt: Date.now()
         });
         document.getElementById('printTitle').value = "";
     };
 
-    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
-    onSnapshot(q, (snapshot) => {
-        const clientsList = document.getElementById('clientsList');
-        clientsList.innerHTML = "";
-        
-        const groups = {};
-        snapshot.forEach(docSnap => {
-            const data = docSnap.data();
-            const id = docSnap.id;
-            if(!groups[data.clientName]) groups[data.clientName] = { orders: [], unpaidTotal: 0 };
-            groups[data.clientName].orders.push({ id, ...data });
-            if(!data.paid) groups[data.clientName].unpaidTotal += data.price;
-        });
-
-        for (const [name, info] of Object.entries(groups)) {
-            const isOpen = openClients.has(name);
-            const clientDiv = document.createElement('div');
-            clientDiv.className = 'client-group';
-            clientDiv.innerHTML = `
-                <div class="client-header" onclick="toggleClientView('${name}')">
-                    <h4><i class="fas fa-user"></i> ${name}</h4>
-                    <span style="font-weight:bold; font-size:13px;">${info.unpaidTotal.toFixed(2)} zł <i class="fas ${isOpen ? 'fa-chevron-up' : 'fa-chevron-down'}" style="margin-left:10px; font-size:10px;"></i></span>
-                </div>
-                <div class="client-content ${isOpen ? 'active' : ''}">
-                    <table>
-                        <thead><tr><th>Tytuł</th><th>Cena</th><th>Status</th><th></th></tr></thead>
-                        <tbody>
-                            ${info.orders.map(o => `
-                                <tr>
-                                    <td>${o.printTitle}</td>
-                                    <td>${o.price.toFixed(2)} zł</td>
-                                    <td><span class="status-badge ${o.paid ? 'paid' : 'unpaid'}">${o.paid ? 'TAK' : 'NIE'}</span></td>
-                                    <td style="text-align:right;">
-                                        <button onclick="togglePaid('${o.id}', ${o.paid})" style="background:none; border:none; color:var(--primary); cursor:pointer;"><i class="fas fa-check"></i></button>
-                                        <button onclick="deleteOrder('${o.id}')" style="background:none; border:none; color:#ff4444; cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
-                                    </td>
-                                </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            clientsList.appendChild(clientDiv);
-        }
-    });
-
     window.toggleClientView = (name) => {
-        if (openClients.has(name)) {
-            openClients.delete(name);
-        } else {
-            openClients.add(name);
-        }
-        // Wywołujemy calculate tylko po to by wymusić re-render (onSnapshot zrobi to sam przy zmianie danych, ale tu zmieniamy tylko lokalny stan widoku)
-        // Najprościej wywołać calculate lub bezpośrednio odświeżyć widok, ale onSnapshot nie zareaguje na zmianę Set.
-        // Dlatego dodajemy ręczne przełączanie klasy dla szybkości:
-        const headers = document.querySelectorAll('.client-header');
-        headers.forEach(h => {
-            if(h.innerText.includes(name)) {
-                h.nextElementSibling.classList.toggle('active');
-                const icon = h.querySelector('.fas.fa-chevron-down, .fas.fa-chevron-up');
-                icon.classList.toggle('fa-chevron-down');
-                icon.classList.toggle('fa-chevron-up');
-            }
+        if (openClients.has(name)) openClients.delete(name); else openClients.add(name);
+        document.querySelectorAll('.client-group').forEach(g => {
+            if(g.querySelector('h4').innerText.includes(name)) g.querySelector('.client-content').classList.toggle('active');
         });
     };
-
-    window.togglePaid = async (id, status) => {
-        // Nie czyścimy openClients, więc stan zostanie zachowany
-        await updateDoc(doc(db, "orders", id), { paid: !status });
-    };
-
-    window.deleteOrder = async (id) => {
-        if(confirm("Usunąć to zamówienie?")) await deleteDoc(doc(db, "orders", id));
-    };
+    window.togglePaid = async (id, status) => { await updateDoc(doc(db, "orders", id), { paid: !status }); };
+    window.deleteOrder = async (id) => { if(confirm("Usunąć?")) await deleteDoc(doc(db, "orders", id)); };
 </script>
 </body>
 </html>

@@ -17,94 +17,35 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
         body { background-color: var(--bg); color: var(--text); line-height: 1.6; scroll-behavior: smooth; }
 
-        /* Header / Nav */
+        /* Nav */
         nav {
             display: flex; justify-content: space-between; align-items: center;
             padding: 15px 10%; background: rgba(15, 15, 15, 0.98);
             position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333;
         }
-
         .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; flex: 1; }
         .nav-controls { display: flex; align-items: center; gap: 15px; }
         .nav-links { display: flex; list-style: none; align-items: center; }
         .nav-links li { margin-left: 25px; }
         .nav-links li a { color: var(--text); text-decoration: none; transition: 0.3s; font-size: 0.9rem; font-weight: 500; }
         .nav-links li a:hover { color: var(--primary); }
+        .lang-switch { background: transparent; border: 1px solid var(--primary); color: var(--primary); padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
 
-        .lang-switch {
-            background: transparent; border: 1px solid var(--primary); color: var(--primary);
-            padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem;
-            transition: 0.3s;
-        }
-        .lang-switch:hover { background: var(--primary); color: #000; }
-        .menu-toggle { display: none; color: var(--text); font-size: 1.4rem; cursor: pointer; }
+        /* Modal */
+        #authModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center; padding: 20px; }
+        #authModal .card { position: relative; max-width: 350px; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #333; width: 100%; }
+        #authModal input { width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
+        
+        .btn { width: 100%; padding: 12px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; transition: 0.3s; margin-bottom: 10px; }
+        .btn-primary { background: var(--primary); color: black; }
+        .btn-google { background: white; color: #444; display: flex; align-items: center; justify-content: center; gap: 10px; }
+        .auth-footer { display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); }
+        .auth-footer span { cursor: pointer; color: var(--primary); }
 
         /* Hero */
-        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1350&q=80'); background-size: cover; padding: 100px 20px 50px 20px; }
-        .hero img { max-width: 220px; margin-bottom: 25px; filter: drop-shadow(0 0 15px rgba(255, 140, 0, 0.3)); }
-        .hero h1 { font-size: clamp(1.8rem, 6vw, 2.8rem); margin-bottom: 15px; }
-        
-        /* Sections */
-        .section { padding: 80px 10%; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 40px; }
-        .card { background: var(--card-bg); padding: 35px; border-radius: 12px; text-align: center; border: 1px solid #222; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
-        
-        /* Contact Section */
-        .contact-box { 
-            background: var(--card-bg); 
-            padding: 40px; 
-            border-radius: 15px; 
-            border: 1px solid var(--primary); 
-            max-width: 500px; 
-            margin: 40px auto;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-start;
-            padding-left: 20%;
-        }
-        .contact-item { display: flex; align-items: center; gap: 15px; margin-bottom: 25px; font-size: 1.1rem; }
-        .contact-item span.label { width: 80px; font-weight: bold; color: var(--primary); }
-        .contact-item a { color: var(--text); text-decoration: none; transition: 0.3s; }
-        .contact-item a:hover { color: var(--primary); }
-        .contact-item i { color: var(--primary); font-size: 1.4rem; width: 30px; }
-        .discord-tag { background: #333; padding: 5px 12px; border-radius: 5px; font-weight: bold; border: 1px dashed var(--primary); color: var(--primary) !important; text-decoration: none !important; }
-        .discord-tag:hover { background: var(--primary); color: #000 !important; }
-
-        /* Buttons */
-        .cta-container { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .btn { padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; gap: 10px; font-size: 0.9rem; cursor: pointer; border: none; }
-        .btn-primary { background-color: var(--primary); color: #000; }
-        .btn-secondary { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
-        .btn:hover { transform: scale(1.05); background-color: white; color: black; }
-
-        /* Auth Modal Styles */
-        #authModal input {
-            width: 100%; padding: 12px; margin-bottom: 15px; 
-            background: #222; border: 1px solid #444; 
-            color: white; border-radius: 5px;
-        }
-        #authModal .card { position: relative; max-width: 350px; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #333; }
-
-        footer { text-align: center; padding: 40px; border-top: 1px solid #222; color: var(--text-muted); }
-        .social-footer { margin-top: 15px; font-size: 1.5rem; }
-        .social-footer a { color: var(--text-muted); margin: 0 15px; transition: 0.3s; }
-        .social-footer a:hover { color: var(--primary); }
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; background: linear-gradient(rgba(0,0,0,0.85), rgba(0,0,0,0.85)), url('https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&w=1350&q=80'); background-size: cover; }
+        .hero img { max-width: 220px; margin-bottom: 25px; }
         .highlight { color: var(--primary); }
-
-        @media (max-width: 768px) {
-            nav { padding: 10px 5%; }
-            .menu-toggle { display: block; }
-            .nav-links {
-                display: none; flex-direction: column; position: absolute; top: 100%; left: 0;
-                width: 100%; background: #151515; padding: 20px; border-bottom: 1px solid #333;
-            }
-            .nav-links.active { display: flex; }
-            .nav-links li { margin: 15px 0; text-align: center; }
-            .contact-box { padding-left: 10%; }
-            .section { padding: 60px 5%; }
-        }
     </style>
 </head>
 <body>
@@ -114,108 +55,53 @@
         <div class="nav-controls">
             <button class="lang-switch" onclick="toggleLang()">PL / EN</button>
             <button id="userBtn" class="lang-switch" onclick="toggleAuthModal()"><i class="fas fa-user"></i></button>
-            <div class="menu-toggle" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
         </div>
         <ul class="nav-links" id="navLinks">
-            <li><a href="#home" onclick="closeMenu()" class="lang" data-en="Start" data-pl="Start">Start</a></li>
-            <li><a href="#about" onclick="closeMenu()" class="lang" data-en="About" data-pl="O mnie">About</a></li>
-            <li><a href="#portfolio" onclick="closeMenu()" class="lang" data-en="Portfolio" data-pl="Portfolio">Portfolio</a></li>
-            <li><a href="#contact" onclick="closeMenu()" class="lang" data-en="Contact" data-pl="Kontakt">Contact</a></li>
+            <li><a href="#home" class="lang" data-en="Start" data-pl="Start">Start</a></li>
+            <li><a href="#contact" class="lang" data-en="Contact" data-pl="Kontakt">Contact</a></li>
         </ul>
     </nav>
 
-    <div id="authModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center; padding: 20px;">
+    <div id="authModal">
         <div class="card">
-            <i class="fas fa-times" onclick="toggleAuthModal()" style="position:absolute; top:15px; right:15px; cursor:pointer; font-size:1.2rem; color: var(--primary);"></i>
-            <h3 id="modalTitle" style="margin-bottom:25px; font-size: 1.5rem;">Panel Admina</h3>
+            <i class="fas fa-times" onclick="toggleAuthModal()" style="position:absolute; top:15px; right:15px; cursor:pointer; color: var(--primary);"></i>
+            <h3 id="modalTitle" style="margin-bottom:20px; text-align: center;">Logowanie</h3>
             
             <div id="authForm">
                 <input type="email" id="authEmail" placeholder="Email">
                 <input type="password" id="authPassword" placeholder="Hasło">
-                <button class="btn btn-primary" onclick="handleAuth()" style="width:100%; margin-bottom:15px;">Zaloguj się</button>
+                <button class="btn btn-primary" onclick="handleAuth()" id="mainAuthBtn">Zaloguj się</button>
+                
+                <button class="btn btn-google" onclick="handleGoogleLogin()">
+                    <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google
+                </button>
+
+                <div class="auth-footer">
+                    <p id="toggleText">Nie masz konta? <span onclick="toggleAuthMode()">Zarejestruj</span></p>
+                    <span onclick="handleResetPassword()">Reset hasła</span>
+                </div>
             </div>
             
             <div id="userInfo" style="display:none; text-align: center;">
-                <p id="userDisplay" style="margin-bottom:20px; font-weight: bold; color: white;"></p>
-                <button class="btn btn-secondary" onclick="handleLogout()" style="width:100%;">Wyloguj się</button>
+                <p id="userDisplay" style="margin-bottom:20px; font-weight: bold;"></p>
+                <button class="btn btn-primary" style="background: transparent; border: 1px solid var(--primary); color: var(--primary);" onclick="handleLogout()">Wyloguj się</button>
             </div>
         </div>
     </div>
 
     <section class="hero" id="home">
-        <img src="logo.png" alt="OSH QRD Studio Logo">
-        <h1 class="lang" data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" data-pl="CYFROWE ŚWIATY <span class='highlight'>W TWOIM ZASIĘGU</span>">
-            DIGITAL WORLDS <span class="highlight">WITHIN YOUR REACH</span>
-        </h1>
-        <p class="lang" data-en="Game Developer | 3D Artist | 3D Printing" data-pl="Twórca Gier | Grafik 3D | Wydruki 3D">
-            Game Developer | 3D Artist | 3D Printing
-        </p>
-        <div class="cta-container">
-            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-primary" target="_blank"><i class="fab fa-google-play"></i> Google Play</a>
-            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank"><i class="fab fa-itch-io"></i> Itch.io</a>
-            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank"><i class="fab fa-artstation"></i> ArtStation</a>
-        </div>
+        <img src="logo.png" alt="Logo">
+        <h1>CYFROWE ŚWIATY <span class="highlight">W TWOIM ZASIĘGU</span></h1>
+        <p>Game Developer | 3D Artist | 3D Printing</p>
     </section>
-
-    <section class="section" id="about">
-        <h2 style="text-align:center; font-size: 2rem;" class="lang" data-en="What do <span class='highlight'>I do?</span>" data-pl="Czym się <span class='highlight'>zajmuję?</span>">What do <span class="highlight">I do?</span></h2>
-        <div class="grid">
-            <div class="card">
-                <i class="fas fa-gamepad"></i>
-                <h3 class="lang" data-en="Gamedev" data-pl="Gamedev">Gamedev</h3>
-                <p class="lang" data-en="I create games for PC and Android, focusing on unique gameplay and atmosphere." data-pl="Tworzę gry na platformy PC oraz Android, dbając o unikalny gameplay i klimat.">I create games for PC and Android, focusing on unique gameplay and atmosphere.</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-cube"></i>
-                <h3 class="lang" data-en="3D Models" data-pl="Modele 3D">3D Models</h3>
-                <p class="lang" data-en="I prepare optimized 3D assets for game engines and high-quality renders." data-pl="Przygotowuję optymalizowane assety 3D pod silniki gier oraz wysokiej jakości rendery.">I prepare optimized 3D assets for game engines and high-quality renders.</p>
-            </div>
-            <div class="card">
-                <i class="fas fa-print"></i>
-                <h3 class="lang" data-en="3D Printing" data-pl="Druk 3D">3D Printing</h3>
-                <p class="lang" data-en="I design and prepare print-ready files, from figurines to technical parts." data-pl="Projektuję i przygotowuję pliki gotowe do druku, od figurek po elementy techniczne.">I design and prepare print-ready files, from figurines to technical parts.</p>
-            </div>
-        </div>
-    </section>
-
-    <section class="section" id="portfolio" style="background-color: #141414; text-align: center;">
-        <h2 style="font-size: 2rem; margin-bottom: 30px;" class="lang" data-en="My <span class='highlight'>Portfolio</span>" data-pl="Moje <span class='highlight'>Portfolio</span>">My <span class="highlight">Portfolio</span></h2>
-        <div class="cta-container">
-            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-secondary" target="_blank">Android Games</a>
-            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank">PC Games</a>
-            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank">ArtStation</a>
-        </div>
-    </section>
-
-    <section class="section" id="contact" style="text-align: center;">
-        <h2 class="lang" data-en="Get in <span class='highlight'>Touch</span>" data-pl="Zostańmy w <span class='highlight'>Kontakcie</span>">Get in <span class="highlight">Touch</span></h2>
-        <div class="contact-box">
-            <div class="contact-item">
-                <i class="fas fa-envelope"></i>
-                <span class="label">E-mail:</span>
-                <a href="mailto:oshqrd@gmail.com">oshqrd@gmail.com</a>
-            </div>
-            <div class="contact-item">
-                <i class="fab fa-discord"></i>
-                <span class="label">Discord:</span>
-                <a href="https://discord.com/users/5941817462261149900" target="_blank" class="discord-tag">oshq</a>
-            </div>
-        </div>
-    </section>
-
-    <footer>
-        <p class="lang" data-en="&copy; 2026 OSH QRD Studio. All rights reserved." data-pl="&copy; 2026 OSH QRD Studio. Wszystkie prawa zastrzeżone.">&copy; 2026 OSH QRD Studio. All rights reserved.</p>
-        <div class="social-footer">
-            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" target="_blank" title="Google Play"><i class="fab fa-google-play"></i></a>
-            <a href="http://oshq.itch.io" target="_blank" title="Itch.io"><i class="fab fa-itch-io"></i></a>
-            <a href="https://oshq.artstation.com" target="_blank" title="ArtStation"><i class="fab fa-artstation"></i></a>
-            <a href="mailto:oshqrd@gmail.com" title="Email"><i class="fas fa-envelope"></i></a>
-        </div>
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, 
+            sendPasswordResetEmail, signInWithPopup, GoogleAuthProvider, 
+            onAuthStateChanged, signOut 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAnEOlk-g8nFBbBKU7hp7aEbIq8u2NBGxI",
@@ -229,30 +115,51 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const provider = new GoogleAuthProvider();
+
+        let isLoginMode = true;
 
         window.toggleAuthModal = () => {
             const modal = document.getElementById('authModal');
-            modal.style.display = modal.style.display === 'none' ? 'flex' : 'none';
+            modal.style.display = (modal.style.display === 'flex') ? 'none' : 'flex';
+        };
+
+        window.toggleAuthMode = () => {
+            isLoginMode = !isLoginMode;
+            document.getElementById('modalTitle').innerText = isLoginMode ? "Logowanie" : "Rejestracja";
+            document.getElementById('mainAuthBtn').innerText = isLoginMode ? "Zaloguj się" : "Zarejestruj się";
+            document.getElementById('toggleText').innerHTML = isLoginMode ? 'Nie masz konta? <span onclick="toggleAuthMode()">Zarejestruj</span>' : 'Masz konto? <span onclick="toggleAuthMode()">Zaloguj</span>';
         };
 
         window.handleAuth = () => {
             const email = document.getElementById('authEmail').value;
             const pass = document.getElementById('authPassword').value;
+            if(!email || !pass) return alert("Wpisz dane");
 
-            signInWithEmailAndPassword(auth, email, pass)
-                .then(() => { toggleAuthModal(); })
-                .catch(err => alert("Błąd logowania: " + err.message));
+            if(isLoginMode) {
+                signInWithEmailAndPassword(auth, email, pass).then(() => toggleAuthModal()).catch(err => alert(err.message));
+            } else {
+                createUserWithEmailAndPassword(auth, email, pass).then(() => { alert("Konto stworzone!"); toggleAuthMode(); }).catch(err => alert(err.message));
+            }
         };
 
-        window.handleLogout = () => {
-            signOut(auth).then(() => { location.reload(); });
+        window.handleGoogleLogin = () => {
+            signInWithPopup(auth, provider).then(() => toggleAuthModal()).catch(err => alert(err.message));
         };
+
+        window.handleResetPassword = () => {
+            const email = document.getElementById('authEmail').value;
+            if(!email) return alert("Wpisz email");
+            sendPasswordResetEmail(auth, email).then(() => alert("Email wysłany!")).catch(err => alert(err.message));
+        };
+
+        window.handleLogout = () => { signOut(auth).then(() => location.reload()); };
 
         onAuthStateChanged(auth, (user) => {
             const form = document.getElementById('authForm');
             const info = document.getElementById('userInfo');
-            const userBtn = document.getElementById('userBtn');
             const navLinks = document.getElementById('navLinks');
+            const userBtn = document.getElementById('userBtn');
 
             if (user) {
                 form.style.display = 'none';
@@ -260,36 +167,20 @@
                 document.getElementById('userDisplay').innerText = user.email;
                 userBtn.style.color = '#ff8c00';
 
-                // Wyświetlanie linku do druku 3D tylko dla admina
-                if (user.email === "pioosz2@gmail.com") {
-                    if (!document.getElementById('adminLink')) {
-                        const li = document.createElement('li');
-                        li.id = 'adminLink';
-                        li.innerHTML = '<a href="3dprint.html" style="color: #ff8c00; font-weight: bold;">DRUK 3D</a>';
-                        navLinks.appendChild(li);
-                    }
+                if (!document.getElementById('serviceLink')) {
+                    const li = document.createElement('li');
+                    li.id = 'serviceLink';
+                    li.innerHTML = '<a href="3dprint.html" style="color: #ff8c00; font-weight: bold;">DRUK 3D</a>';
+                    navLinks.appendChild(li);
                 }
             } else {
                 form.style.display = 'block';
                 info.style.display = 'none';
-                userBtn.style.color = 'var(--primary)';
-                const adminLink = document.getElementById('adminLink');
-                if (adminLink) adminLink.remove();
+                userBtn.style.color = 'white';
+                const link = document.getElementById('serviceLink');
+                if (link) link.remove();
             }
         });
-    </script>
-
-    <script>
-        let currentLang = 'en';
-        function toggleLang() {
-            currentLang = currentLang === 'en' ? 'pl' : 'en';
-            document.querySelectorAll('.lang').forEach(el => {
-                el.innerHTML = el.getAttribute(`data-${currentLang}`);
-            });
-            document.documentElement.lang = currentLang;
-        }
-        function toggleMenu() { document.getElementById('navLinks').classList.toggle('active'); }
-        function closeMenu() { document.getElementById('navLinks').classList.remove('active'); }
     </script>
 </body>
 </html>
