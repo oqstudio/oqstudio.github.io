@@ -32,7 +32,7 @@
 
         /* Kontener główny - domyślnie ukryty */
         #mainContent { display: none; }
-        .container { width: 100%; max-width: 600px; margin: 0 auto; padding: 10px; }
+        .container { width: 100%; max-width: 800px; /* Zwiększyłem szerokość, żeby tabela się mieściła */ margin: 0 auto; padding: 10px; }
 
         /* Karty i Formularze */
         .card {
@@ -71,12 +71,30 @@
         /* Lista */
         .client-group { background: #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
         .client-header { background: #2a2a2a; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .client-content { display: none; padding: 10px; background: #1a1a1a; }
+        .client-content { display: none; padding: 10px; background: #1a1a1a; overflow-x: auto; }
         .client-content.active { display: block; }
-        .status-badge { padding: 2px 5px; border-radius: 3px; font-size: 10px; font-weight: bold; color: white; }
-        .unpaid { background: #ff4444; } .paid { background: #00c851; }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        td, th { padding: 8px; text-align: left; border-bottom: 1px solid #333; }
+        
+        /* STATUSY */
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; display: inline-block; white-space: nowrap; }
+        
+        /* Płatność */
+        .unpaid { background: #ff4444; } 
+        .paid { background: #00c851; }
+        
+        /* Status pracy */
+        .work-w-trakcie { background: #33b5e5; } /* Niebieski */
+        .work-zrobione { background: #007E33; } /* Ciemny zielony */
+        .work-oddane { background: #757575; color: #ddd; } /* Szary */
+
+        /* Select dla admina */
+        .admin-select {
+            background: #333; color: white; border: 1px solid #555;
+            padding: 4px; border-radius: 4px; font-size: 11px; cursor: pointer;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+        td, th { padding: 10px; text-align: left; border-bottom: 1px solid #333; vertical-align: middle; }
+        th { color: #888; font-weight: normal; font-size: 11px; text-transform: uppercase; }
 
         #profileModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; }
     </style>
@@ -265,6 +283,9 @@
 
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
+                // Domyślny status pracy dla starych rekordów
+                if (!data.workStatus) data.workStatus = "W trakcie"; 
+                
                 const groupKey = isAdmin ? data.clientName : "Twoje Zamówienia";
                 if(!groups[groupKey]) groups[groupKey] = { orders: [], unpaidTotal: 0, email: data.clientEmail };
                 groups[groupKey].orders.push({ id: docSnap.id, ...data });
@@ -285,19 +306,47 @@
                     </div>
                     <div class="client-content ${isOpen ? 'active' : ''}">
                         <table>
-                            <thead><tr><th>Projekt</th><th>Cena</th><th>Status</th>${isAdmin ? '<th>Akcja</th>' : ''}</tr></thead>
+                            <thead>
+                                <tr>
+                                    <th>Projekt</th>
+                                    <th>Płatność</th>
+                                    <th>Realizacja</th>
+                                    <th>Cena</th>
+                                    ${isAdmin ? '<th>Akcja</th>' : ''}
+                                </tr>
+                            </thead>
                             <tbody>
-                                ${info.orders.map(o => `
+                                ${info.orders.map(o => {
+                                    // Generowanie statusu pracy (Admin: Select, User: Badge)
+                                    let workStatusHtml = '';
+                                    if(isAdmin) {
+                                        workStatusHtml = `
+                                            <select class="admin-select" onchange="updateWorkStatus('${o.id}', this.value)" onclick="event.stopPropagation()">
+                                                <option value="W trakcie" ${o.workStatus === 'W trakcie' ? 'selected' : ''}>W trakcie</option>
+                                                <option value="Zrobione" ${o.workStatus === 'Zrobione' ? 'selected' : ''}>Zrobione</option>
+                                                <option value="Oddane" ${o.workStatus === 'Oddane' ? 'selected' : ''}>Oddane</option>
+                                            </select>
+                                        `;
+                                    } else {
+                                        let cls = 'work-w-trakcie';
+                                        if (o.workStatus === 'Zrobione') cls = 'work-zrobione';
+                                        if (o.workStatus === 'Oddane') cls = 'work-oddane';
+                                        workStatusHtml = `<span class="status-badge ${cls}">${o.workStatus}</span>`;
+                                    }
+
+                                    return `
                                     <tr>
                                         <td>${o.printTitle}</td>
-                                        <td>${o.price.toFixed(2)} zł</td>
                                         <td><span class="status-badge ${o.paid ? 'paid' : 'unpaid'}">${o.paid ? 'ZAPŁACONE' : 'NIEZAPŁACONE'}</span></td>
+                                        <td>${workStatusHtml}</td>
+                                        <td style="font-weight:bold;">${o.price.toFixed(2)} zł</td>
                                         ${isAdmin ? `<td style="white-space:nowrap;">
-                                            <button onclick="togglePaid('${o.id}', ${o.paid})" style="background:none; border:none; color:var(--primary); cursor:pointer;"><i class="fas fa-check"></i></button>
-                                            <button onclick="deleteOrder('${o.id}')" style="background:none; border:none; color:#ff4444; cursor:pointer; margin-left:8px;"><i class="fas fa-trash"></i></button>
+                                            <button onclick="togglePaid('${o.id}', ${o.paid})" style="background:none; border:none; color:var(--primary); cursor:pointer;" title="Zmień płatność"><i class="fas fa-money-bill-wave"></i></button>
+                                            <button onclick="deleteOrder('${o.id}')" style="background:none; border:none; color:#ff4444; cursor:pointer; margin-left:8px;" title="Usuń"><i class="fas fa-trash"></i></button>
                                         </td>` : ''}
                                     </tr>
-                                `).join('')}
+                                    `;
+                                }).join('')}
                             </tbody>
                         </table>
                     </div>
@@ -343,8 +392,11 @@
         const price = calculate();
         if(!client || !email || !title) return alert("Uzupełnij wszystko!");
         openClients.add(client);
+        
+        // DODANO: workStatus: "W trakcie"
         await addDoc(collection(db, "orders"), {
-            clientName: client, clientEmail: email, printTitle: title, price: parseFloat(price), paid: false, createdAt: Date.now()
+            clientName: client, clientEmail: email, printTitle: title, price: parseFloat(price), 
+            paid: false, workStatus: "W trakcie", createdAt: Date.now()
         });
         document.getElementById('printTitle').value = "";
     };
@@ -355,6 +407,12 @@
         });
     };
     window.togglePaid = async (id, status) => { await updateDoc(doc(db, "orders", id), { paid: !status }); };
+    
+    // NOWA FUNKCJA: Zmiana statusu pracy
+    window.updateWorkStatus = async (id, newStatus) => {
+        await updateDoc(doc(db, "orders", id), { workStatus: newStatus });
+    };
+    
     window.deleteOrder = async (id) => { if(confirm("Usunąć?")) await deleteDoc(doc(db, "orders", id)); };
 </script>
 </body>
