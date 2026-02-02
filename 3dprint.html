@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zamówienia 3D | OSH QRD Studio</title>
+    <title>Zamówienia 3D | OQ Studio</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
@@ -15,86 +15,136 @@
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; padding-top: 80px; }
+        body { background-color: var(--bg); color: var(--text); line-height: 1.4; padding-top: 70px; }
 
         /* Menu górne */
         nav {
             display: flex; justify-content: space-between; align-items: center;
-            padding: 15px 10%; background: rgba(15, 15, 15, 0.98);
+            padding: 10px 5%; background: rgba(15, 15, 15, 0.98);
             position: fixed; width: 100%; top: 0; z-index: 1000; border-bottom: 1px solid #333;
         }
-        .logo-text { font-size: 1.1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
+        .logo-text { font-size: 1rem; font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; cursor: pointer; }
         .nav-controls { display: flex; align-items: center; gap: 15px; }
-        .lang-switch {
-            background: transparent; border: 1px solid var(--primary); color: var(--primary);
-            padding: 4px 10px; cursor: pointer; border-radius: 4px; font-weight: bold; font-size: 0.75rem;
-        }
 
-        /* Kontener główny - domyślnie ukryty */
+        /* Kontener główny */
         #mainContent { display: none; }
-        .container { width: 100%; max-width: 800px; /* Zwiększyłem szerokość, żeby tabela się mieściła */ margin: 0 auto; padding: 10px; }
+        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 5px; }
 
         /* Karty i Formularze */
         .card {
-            background: var(--card-bg); padding: 20px; border-radius: 12px;
-            border: 1px solid #333; margin-bottom: 20px;
+            background: var(--card-bg); padding: 15px; border-radius: 8px;
+            border: 1px solid #333; margin-bottom: 15px;
         }
         input {
-            width: 100%; padding: 12px; margin-bottom: 15px; background: var(--input-bg);
-            border: 1px solid #444; color: white; border-radius: 8px; font-size: 14px;
+            width: 100%; padding: 8px; margin-bottom: 10px; background: var(--input-bg);
+            border: 1px solid #444; color: white; border-radius: 6px; font-size: 13px;
         }
         .btn-action {
             width: 100%; background: var(--primary); color: black;
-            border: none; padding: 14px; border-radius: 8px;
-            font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 10px;
+            border: none; padding: 10px; border-radius: 6px;
+            font-weight: bold; cursor: pointer; text-transform: uppercase; margin-bottom: 5px; font-size: 0.9rem;
         }
 
-        /* MODAL LOGOWANIA I REJESTRACJI */
+        /* MODAL LOGOWANIA */
         #authOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95); z-index: 3000;
             display: flex; justify-content: center; align-items: center; padding: 20px;
         }
-        .auth-card { max-width: 380px; width: 100%; text-align: center; }
+        .auth-card { max-width: 380px; width: 100%; text-align: center; padding: 30px; }
         .google-btn { background: white; color: #444; }
         .auth-footer { display: flex; justify-content: space-between; font-size: 0.75rem; margin-top: 15px; }
 
-        /* Style kalkulatora i listy */
+        /* Admin Panel */
         #adminPanel { display: none; }
-        .group-box { background: rgba(255, 140, 0, 0.03); padding: 15px; border-radius: 10px; border: 1px solid #333; margin-bottom: 15px; }
-        .row { display: flex; gap: 10px; margin-bottom: 10px; align-items: flex-end; }
+        .group-box { background: rgba(255, 140, 0, 0.03); padding: 10px; border-radius: 8px; border: 1px solid #333; margin-bottom: 10px; }
+        .row { display: flex; gap: 8px; margin-bottom: 8px; align-items: flex-end; }
         .row div { flex: 1; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; font-size: 11px; color: var(--primary); text-transform: uppercase; }
-        .result-zone { background: var(--primary); color: #000; padding: 15px; border-radius: 10px; text-align: center; }
-        .total-val { font-size: 32px; font-weight: 900; }
+        label { display: block; margin-bottom: 2px; font-weight: bold; font-size: 10px; color: var(--primary); text-transform: uppercase; }
+        .result-zone { background: var(--primary); color: #000; padding: 10px; border-radius: 8px; text-align: center; margin-bottom: 10px; }
+        .total-val { font-size: 24px; font-weight: 900; }
         
-        /* Lista */
-        .client-group { background: #222; margin-bottom: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #333; }
-        .client-header { background: #2a2a2a; padding: 12px 15px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
-        .client-content { display: none; padding: 10px; background: #1a1a1a; overflow-x: auto; }
+        /* LISTA KLIENTÓW */
+        .client-group { background: #222; margin-bottom: 8px; border-radius: 6px; overflow: hidden; border: 1px solid #333; }
+        .client-header { 
+            background: #2a2a2a; padding: 10px 12px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; 
+        }
+        .client-header h4 { margin: 0; font-size: 0.95rem; }
+        .client-content { display: none; padding: 0; background: #1a1a1a; }
         .client-content.active { display: block; }
         
         /* STATUSY */
-        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; display: inline-block; white-space: nowrap; }
-        
-        /* Płatność */
-        .unpaid { background: #ff4444; } 
-        .paid { background: #00c851; }
-        
-        /* Status pracy */
-        .work-w-trakcie { background: #33b5e5; } /* Niebieski */
-        .work-zrobione { background: #007E33; } /* Ciemny zielony */
-        .work-oddane { background: #757575; color: #ddd; } /* Szary */
+        .status-badge { padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; color: white; display: inline-block; }
+        .unpaid { background: #ff4444; } .paid { background: #00c851; }
+        .work-w-trakcie { background: #33b5e5; }
+        .work-zrobione { background: #007E33; }
+        .work-oddane { background: #757575; color: #ddd; }
 
-        /* Select dla admina */
         .admin-select {
             background: #333; color: white; border: 1px solid #555;
-            padding: 4px; border-radius: 4px; font-size: 11px; cursor: pointer;
+            padding: 4px; border-radius: 3px; font-size: 11px; cursor: pointer;
         }
 
-        table { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 500px; }
+        /* --- RESPONSYWNA TABELA (MAGIA DZIEJE SIĘ TUTAJ) --- */
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
         td, th { padding: 10px; text-align: left; border-bottom: 1px solid #333; vertical-align: middle; }
-        th { color: #888; font-weight: normal; font-size: 11px; text-transform: uppercase; }
+        th { color: #888; font-weight: normal; font-size: 10px; text-transform: uppercase; }
+
+        /* Wersja mobilna - Zmiana w Karty */
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr { display: block; }
+            thead { display: none; } /* Ukrywamy nagłówki tabeli */
+            
+            tr {
+                margin: 10px;
+                border: 1px solid #333;
+                border-radius: 8px;
+                background: #222;
+                padding: 10px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            }
+            
+            td {
+                border: none;
+                position: relative;
+                padding: 5px 0 5px 40%; /* Miejsce na etykietę */
+                text-align: right;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+            }
+
+            /* Etykiety po lewej stronie (np. CENA:) */
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 0;
+                width: 35%;
+                font-weight: bold;
+                text-transform: uppercase;
+                color: #888;
+                font-size: 10px;
+                text-align: left;
+            }
+
+            /* Specjalny styl dla nazwy projektu (pierwsza kolumna) */
+            td:first-child {
+                padding: 0 0 10px 0;
+                text-align: left;
+                font-weight: bold;
+                font-size: 1.1rem;
+                color: var(--primary);
+                border-bottom: 1px solid #333;
+                margin-bottom: 5px;
+                display: block;
+                width: 100%;
+            }
+            td:first-child::before { content: none; } /* Brak etykiety dla tytułu */
+
+            /* Styl dla selecta i przycisków na mobilce */
+            .admin-select { padding: 8px; font-size: 13px; width: 100%; max-width: 150px; }
+            button { padding: 5px 10px; }
+        }
 
         #profileModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); z-index:2000; justify-content:center; align-items:center; }
     </style>
@@ -107,13 +157,10 @@
             <div id="authForm">
                 <input type="email" id="authEmail" placeholder="Email">
                 <input type="password" id="authPassword" placeholder="Hasło">
-                
                 <button class="btn-action" onclick="handleAuth()" id="authMainBtn">Zaloguj się</button>
-                
                 <button class="btn-action google-btn" onclick="handleGoogleLogin()">
                     <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18" style="vertical-align: middle; margin-right: 8px;"> Google
                 </button>
-
                 <div class="auth-footer">
                     <p id="toggleAuthMode" style="color:var(--text-muted); cursor:pointer;" onclick="toggleAuthMode()">Załóż konto</p>
                     <p style="color:var(--primary); cursor:pointer;" onclick="handleResetPassword()">Reset hasła</p>
@@ -125,7 +172,7 @@
     <nav>
         <div class="logo-text" onclick="window.location.href='index.html'">OSH QRD Studio</div>
         <div class="nav-controls">
-            <button id="userBtn" class="lang-switch" onclick="toggleProfileModal()"><i class="fas fa-user"></i></button>
+            <button id="userBtn" style="background:none; border:none; color:var(--primary); font-size:1.2rem;" onclick="toggleProfileModal()"><i class="fas fa-user"></i></button>
         </div>
     </nav>
 
@@ -142,7 +189,7 @@
         <div class="container">
             <div id="adminPanel">
                 <div class="card">
-                    <h2>Kalkulator Admina</h2>
+                    <h2 style="font-size: 1.2rem; margin-bottom: 10px;">Kalkulator Admina</h2>
                     <div class="group-box" style="border-color: var(--primary); border-style: dashed;">
                         <label>Czas pracy:</label>
                         <div class="row">
@@ -169,9 +216,9 @@
                     </div>
                     <div class="group-box" style="border-color: #555;">
                         <label>Dane Klienta:</label>
-                        <input type="text" id="clientName" placeholder="Imię i Nazwisko" style="margin-bottom:10px;">
+                        <input type="text" id="clientName" placeholder="Imię i Nazwisko">
                         <input type="email" id="clientEmail" placeholder="E-mail klienta">
-                        <input type="text" id="printTitle" placeholder="Tytuł wydruku" style="margin-top:10px;">
+                        <input type="text" id="printTitle" placeholder="Tytuł wydruku">
                     </div>
                     <div class="result-zone">
                         <div class="total-val"><span id="totalPrice">0.00</span> zł</div>
@@ -182,7 +229,7 @@
             </div>
 
             <div id="ordersContainer">
-                <h3 id="listTitle" style="margin-bottom: 20px;">Twoje Wydruki</h3>
+                <h3 id="listTitle" style="margin-bottom: 15px; font-size: 1.1rem;">Twoje Wydruki</h3>
                 <div id="clientsList"></div>
             </div>
         </div>
@@ -283,8 +330,7 @@
 
             snapshot.forEach(docSnap => {
                 const data = docSnap.data();
-                // Domyślny status pracy dla starych rekordów
-                if (!data.workStatus) data.workStatus = "W trakcie"; 
+                if (!data.workStatus) data.workStatus = "W trakcie";
                 
                 const groupKey = isAdmin ? data.clientName : "Twoje Zamówienia";
                 if(!groups[groupKey]) groups[groupKey] = { orders: [], unpaidTotal: 0, email: data.clientEmail };
@@ -300,24 +346,15 @@
                     <div class="client-header" onclick="toggleClientView('${name}')">
                         <div>
                             <h4><i class="fas fa-user"></i> ${name}</h4>
-                            ${isAdmin ? `<small style="color:#888;">${info.email}</small>` : ''}
+                            ${isAdmin ? `<small style="color:#888; font-size:0.75rem;">${info.email}</small>` : ''}
                         </div>
-                        <span style="font-weight:bold;">${info.unpaidTotal.toFixed(2)} zł</span>
+                        <span style="font-weight:bold; font-size:0.9rem;">${info.unpaidTotal.toFixed(2)} zł</span>
                     </div>
                     <div class="client-content ${isOpen ? 'active' : ''}">
                         <table>
-                            <thead>
-                                <tr>
-                                    <th>Projekt</th>
-                                    <th>Płatność</th>
-                                    <th>Realizacja</th>
-                                    <th>Cena</th>
-                                    ${isAdmin ? '<th>Akcja</th>' : ''}
-                                </tr>
-                            </thead>
+                            ${isAdmin ? '<thead><tr><th>Projekt</th><th>Status</th><th>Realizacja</th><th>Cena</th><th>Akcja</th></tr></thead>' : ''} 
                             <tbody>
                                 ${info.orders.map(o => {
-                                    // Generowanie statusu pracy (Admin: Select, User: Badge)
                                     let workStatusHtml = '';
                                     if(isAdmin) {
                                         workStatusHtml = `
@@ -336,13 +373,13 @@
 
                                     return `
                                     <tr>
-                                        <td>${o.printTitle}</td>
-                                        <td><span class="status-badge ${o.paid ? 'paid' : 'unpaid'}">${o.paid ? 'ZAPŁACONE' : 'NIEZAPŁACONE'}</span></td>
-                                        <td>${workStatusHtml}</td>
-                                        <td style="font-weight:bold;">${o.price.toFixed(2)} zł</td>
-                                        ${isAdmin ? `<td style="white-space:nowrap;">
-                                            <button onclick="togglePaid('${o.id}', ${o.paid})" style="background:none; border:none; color:var(--primary); cursor:pointer;" title="Zmień płatność"><i class="fas fa-money-bill-wave"></i></button>
-                                            <button onclick="deleteOrder('${o.id}')" style="background:none; border:none; color:#ff4444; cursor:pointer; margin-left:8px;" title="Usuń"><i class="fas fa-trash"></i></button>
+                                        <td data-label="Projekt">${o.printTitle}</td>
+                                        <td data-label="Płatność"><span class="status-badge ${o.paid ? 'paid' : 'unpaid'}">${o.paid ? 'ZAPŁACONE' : 'NIEZAPŁACONE'}</span></td>
+                                        <td data-label="Realizacja">${workStatusHtml}</td>
+                                        <td data-label="Cena" style="font-weight:bold;">${o.price.toFixed(2)} zł</td>
+                                        ${isAdmin ? `<td data-label="Akcja" style="text-align:right;">
+                                            <button onclick="togglePaid('${o.id}', ${o.paid})" style="background:none; border:none; color:var(--primary); cursor:pointer; font-size:1.2rem;" title="Zmień płatność"><i class="fas fa-money-bill-wave"></i></button>
+                                            <button onclick="deleteOrder('${o.id}')" style="background:none; border:none; color:#ff4444; cursor:pointer; margin-left:15px; font-size:1.2rem;" title="Usuń"><i class="fas fa-trash"></i></button>
                                         </td>` : ''}
                                     </tr>
                                     `;
@@ -356,7 +393,7 @@
         });
     }
 
-    // KALKULATOR LOGIKA
+    // KALKULATOR
     window.syncFromDecimal = () => {
         const dec = parseFloat(document.getElementById('decHours').value) || 0;
         document.getElementById('hPart').value = Math.floor(dec) || '';
@@ -393,7 +430,6 @@
         if(!client || !email || !title) return alert("Uzupełnij wszystko!");
         openClients.add(client);
         
-        // DODANO: workStatus: "W trakcie"
         await addDoc(collection(db, "orders"), {
             clientName: client, clientEmail: email, printTitle: title, price: parseFloat(price), 
             paid: false, workStatus: "W trakcie", createdAt: Date.now()
@@ -408,7 +444,6 @@
     };
     window.togglePaid = async (id, status) => { await updateDoc(doc(db, "orders", id), { paid: !status }); };
     
-    // NOWA FUNKCJA: Zmiana statusu pracy
     window.updateWorkStatus = async (id, newStatus) => {
         await updateDoc(doc(db, "orders", id), { workStatus: newStatus });
     };
