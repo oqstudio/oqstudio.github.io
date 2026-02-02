@@ -41,19 +41,30 @@
         /* Sekcje */
         .section { padding: 80px 10%; }
         .section-title { text-align: center; font-size: 2rem; margin-bottom: 40px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
-        .card { background: var(--card-bg); padding: 35px; border-radius: 12px; text-align: center; border: 1px solid #222; transition: 0.3s; }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); }
-        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; }
+        
+        /* Karty informacyjne (About) */
+        .info-card { background: var(--card-bg); padding: 35px; border-radius: 12px; text-align: center; border: 1px solid #222; transition: 0.3s; display: flex; flex-direction: column; align-items: center; }
+        .info-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .info-card i.main-icon { font-size: 2.5rem; color: var(--primary); margin-bottom: 20px; }
+        .info-card h3 { margin-bottom: 15px; font-size: 1.2rem; }
+        
+        /* ZMIANA: Klasa description zamiast p, żeby obsłużyć listę */
+        .info-card .description { color: var(--text-muted); font-size: 0.95rem; width: 100%; }
+        
+        /* Lista w karcie */
+        .card-list { text-align: left; display: inline-block; padding-left: 20px; margin-top: 10px; color: var(--text-muted); }
+        .card-list li { margin-bottom: 5px; }
 
-        /* Portfolio */
-        .portfolio-btns { display: flex; gap: 15px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
-        .btn { padding: 12px 28px; border-radius: 6px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 0.9rem; cursor: pointer; border: none; min-width: 160px; }
-        .btn-primary { background-color: var(--primary); color: #000; }
+        /* Przyciski */
+        .portfolio-btns { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .btn { padding: 15px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; transition: 0.3s; display: inline-flex; align-items: center; justify-content: center; gap: 10px; font-size: 1rem; cursor: pointer; border: none; min-width: 180px; }
+        .btn-primary { background-color: var(--primary); color: #000; width: 100%; text-align: center; }
         .btn-secondary { border: 1px solid var(--primary); color: var(--primary); background: transparent; }
-        .btn:hover { transform: scale(1.05); background-color: white; color: black; }
+        .btn:hover { transform: scale(1.05); opacity: 0.9; }
+        .btn-secondary:hover { background-color: white; color: black; border-color: white; }
 
-        /* Kontakt - Wyśrodkowany blok, wyrównany do lewej w środku */
+        /* Kontakt */
         .contact-box { 
             background: var(--card-bg); 
             padding: 40px; 
@@ -65,8 +76,8 @@
             justify-content: center; 
         }
         .contact-align { display: flex; flex-direction: column; align-items: flex-start; gap: 20px; }
-        .contact-item { display: flex; align-items: center; gap: 15px; font-size: 1.1rem; }
-        .contact-item a { color: var(--text); text-decoration: none; transition: 0.3s; }
+        .contact-item { display: flex; align-items: center; gap: 15px; font-size: 1.1rem; position: relative; }
+        .contact-item a { color: var(--text); text-decoration: none; transition: 0.3s; cursor: pointer; }
         .contact-item a:hover { color: var(--primary); }
         .contact-item i { width: 25px; color: var(--primary); text-align: center; font-size: 1.3rem; }
 
@@ -74,7 +85,7 @@
         #authModal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.92); z-index:2000; justify-content:center; align-items:center; padding: 20px; }
         #authModal .card { position: relative; max-width: 380px; background: #1a1a1a; padding: 30px; border-radius: 12px; border: 1px solid #333; width: 100%; text-align: center; }
         #authModal input { width: 100%; padding: 12px; margin-bottom: 15px; background: #222; border: 1px solid #444; color: white; border-radius: 5px; }
-        .auth-btn-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; }
+        .auth-btn-group { display: flex; flex-direction: column; gap: 12px; margin-bottom: 15px; width: 100%; }
         .btn-google { background: white; color: #444; }
 
         footer { text-align: center; padding: 40px 10%; border-top: 1px solid #222; color: var(--text-muted); }
@@ -93,7 +104,7 @@
             }
             .nav-links.active { display: flex; }
             .nav-links li { margin: 15px 0; margin-left: 0; text-align: center; }
-            .btn { width: 100%; }
+            .btn-secondary { width: 100%; }
             .section { padding: 60px 5%; }
         }
     </style>
@@ -119,7 +130,7 @@
         <div class="card">
             <i class="fas fa-times" onclick="toggleAuthModal()" style="position:absolute; top:15px; right:15px; cursor:pointer; color: var(--primary);"></i>
             <h3 id="modalTitle" style="margin-bottom:20px;" class="lang" data-en="Login" data-pl="Logowanie">Login</h3>
-            <div id="authForm">
+            <div id="authForm" style="width: 100%;">
                 <input type="email" id="authEmail" placeholder="Email">
                 <input type="password" id="authPassword" placeholder="Password">
                 <div class="auth-btn-group">
@@ -128,51 +139,65 @@
                         <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"> Google
                     </button>
                 </div>
-                <div style="display: flex; justify-content: space-between; font-size: 0.75rem;">
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; width: 100%;">
                     <p onclick="toggleAuthMode()" id="toggleText" class="lang" data-en="Create account" data-pl="Załóż konto" style="cursor:pointer; color:var(--text-muted);">Create account</p>
                     <p onclick="handleResetPassword()" class="lang" data-en="Reset password" data-pl="Reset hasła" style="cursor:pointer; color:var(--primary);">Reset password</p>
                 </div>
             </div>
-            <div id="userInfo" style="display:none;">
+            <div id="userInfo" style="display:none; width: 100%;">
                 <p id="userDisplay" style="margin-bottom:20px; font-weight: bold;"></p>
-                <button class="btn btn-secondary lang" data-en="Logout" data-pl="Wyloguj się" onclick="handleLogout()">Logout</button>
+                <button class="btn btn-secondary lang" data-en="Logout" data-pl="Wyloguj się" onclick="handleLogout()" style="width: 100%;">Logout</button>
             </div>
         </div>
     </div>
 
     <section class="hero" id="home">
         <img src="logo.png" alt="Logo">
-        <h1 class="lang" data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" data-pl="CYFROWE ŚWIATY <span class='highlight'>W TWOIM ZASIĘGU</span>">DIGITAL WORLDS <span class="highlight">WITHIN YOUR REACH</span></h1>
-        <p class="lang" data-en="Game Developer | 3D Artist | 3D Printing" data-pl="Twórca Gier | Grafik 3D | Wydruki 3D">Game Developer | 3D Artist | 3D Printing</p>
+        <h1 class="lang" data-en="DIGITAL WORLDS <span class='highlight'>WITHIN YOUR REACH</span>" data-pl="CYFROWE ŚWIATY <span class='highlight'>W ZASIĘGU RĘKI</span>">DIGITAL WORLDS <span class="highlight">WITHIN YOUR REACH</span></h1>
+        <p class="lang" data-en="Game Developer | Tools Programmer | 3D Artist" data-pl="Twórca Gier | Programista Narzędzi | Grafik 3D">Game Developer | Tools Programmer | 3D Artist</p>
     </section>
 
     <section class="section" id="about">
         <h2 class="section-title lang" data-en="What do <span class='highlight'>I do?</span>" data-pl="Czym się <span class='highlight'>zajmuję?</span>">What do <span class="highlight">I do?</span></h2>
         <div class="grid">
-            <div class="card">
-                <i class="fas fa-gamepad"></i>
+            <div class="info-card">
+                <i class="fas fa-gamepad main-icon"></i>
                 <h3 class="lang" data-en="Gamedev" data-pl="Gamedev">Gamedev</h3>
-                <p class="lang" data-en="I create games for PC and Android." data-pl="Tworzę gry na platformy PC oraz Android.">I create games for PC and Android.</p>
+                <div class="description lang" data-en="I create immersive games for PC and Android platforms." data-pl="Tworzę wciągające gry na platformy PC oraz Android.">I create immersive games for PC and Android platforms.</div>
             </div>
-            <div class="card">
-                <i class="fas fa-cube"></i>
-                <h3 class="lang" data-en="3D Models" data-pl="Modele 3D">3D Models</h3>
-                <p class="lang" data-en="I prepare optimized 3D assets." data-pl="Przygotowuję optymalizowane assety 3D.">I prepare optimized 3D assets.</p>
+            
+            <div class="info-card">
+                <i class="fas fa-code main-icon"></i>
+                <h3 class="lang" data-en="Tools Dev" data-pl="Programowanie">Tools Dev</h3>
+                <div class="description lang" data-en="I program automation scripts." data-pl="Programuję skrypty automatyzujące pracę.">I program automation scripts.</div>
             </div>
-            <div class="card">
-                <i class="fas fa-print"></i>
+            
+            <div class="info-card">
+                <i class="fas fa-print main-icon"></i>
                 <h3 class="lang" data-en="3D Printing" data-pl="Druk 3D">3D Printing</h3>
-                <p class="lang" data-en="I design print-ready files." data-pl="Projektuję pliki gotowe do druku.">I design print-ready files.</p>
+                <div class="description lang" data-en="I provide professional 3D printing services." data-pl="Zajmuję się profesjonalnym drukiem modeli 3D.">I provide professional 3D printing services.</div>
+            </div>
+
+            <div class="info-card">
+                <i class="fas fa-cubes main-icon"></i>
+                <h3 class="lang" data-en="3D Modeling" data-pl="Modelowanie 3D">3D Modeling</h3>
+                <div class="description lang" 
+                   data-en="I create optimized 3D models:<ul class='card-list'><li>For gamedev industry</li><li>For 3D printing</li><li>For 3D laser engraving</li></ul>" 
+                   data-pl="Tworzę zoptymalizowane modele 3D:<ul class='card-list'><li>Dla branży gamedev</li><li>Pod druk 3D</li><li>Pod laserowy grawer</li></ul>">
+                   I create optimized 3D models:<ul class='card-list'><li>For gamedev industry</li><li>For 3D printing</li><li>For 3D laser engraving</li></ul>
+                </div>
             </div>
         </div>
     </section>
 
     <section class="section" id="portfolio" style="background: #141414;">
         <h2 class="section-title lang" data-en="My <span class='highlight'>Portfolio</span>" data-pl="Moje <span class='highlight'>Portfolio</span>">My <span class="highlight">Portfolio</span></h2>
+        
         <div class="portfolio-btns">
-            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-primary" target="_blank">Google Play</a>
-            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank">Itch.io</a>
-            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank">ArtStation</a>
+            <a href="https://github.com/oqstudio" class="btn btn-secondary" target="_blank"><i class="fab fa-github"></i> GitHub</a>
+            <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" class="btn btn-secondary" target="_blank"><i class="fab fa-google-play"></i> Google Play</a>
+            <a href="http://oshq.itch.io" class="btn btn-secondary" target="_blank"><i class="fab fa-itch-io"></i> Itch.io</a>
+            <a href="https://oshq.artstation.com" class="btn btn-secondary" target="_blank"><i class="fab fa-artstation"></i> ArtStation</a>
         </div>
     </section>
 
@@ -186,15 +211,20 @@
                 </div>
                 <div class="contact-item">
                     <i class="fab fa-discord"></i>
-                    <a href="#" class="discord-tag">oshq</a>
+                    <a href="https://discord.com/users/540518287977611294" target="_blank" title="Open Discord Profile">oshq</a>
+                </div>
+                <div class="contact-item">
+                    <i class="fab fa-github"></i>
+                    <a href="https://github.com/oqstudio" target="_blank">github.com/oqstudio</a>
                 </div>
             </div>
         </div>
     </section>
 
     <footer>
-        <p>&copy; 2026 OSH QRD Studio. All rights reserved.</p>
+        <p>&copy; 2026 OQ Studio. All rights reserved.</p>
         <div class="social-footer">
+            <a href="https://github.com/oqstudio" target="_blank"><i class="fab fa-github"></i></a>
             <a href="https://play.google.com/store/apps/dev?id=5941817462261149900" target="_blank"><i class="fab fa-google-play"></i></a>
             <a href="http://oshq.itch.io" target="_blank"><i class="fab fa-itch-io"></i></a>
             <a href="https://oshq.artstation.com" target="_blank"><i class="fab fa-artstation"></i></a>
@@ -280,14 +310,17 @@
         window.toggleLang = function() {
             currentLang = currentLang === 'en' ? 'pl' : 'en';
             document.querySelectorAll('.lang').forEach(el => {
+                // To jest kluczowe: całkowite nadpisanie innerHTML
                 el.innerHTML = el.getAttribute(`data-${currentLang}`);
             });
             const serviceLink = document.querySelector('#serviceLink a');
             if(serviceLink) serviceLink.innerText = currentLang === 'en' ? '3D PRINT' : 'DRUK 3D';
             
             const modalTitle = document.getElementById('modalTitle');
-            if(modalTitle) {
+            if(modalTitle && document.getElementById('authModal').style.display === 'flex') {
                 modalTitle.innerText = isLoginMode ? (currentLang === 'en' ? "Login" : "Logowanie") : (currentLang === 'en' ? "Register" : "Rejestracja");
+                 document.getElementById('mainAuthBtn').innerText = isLoginMode ? (currentLang === 'en' ? "Login" : "Zaloguj się") : (currentLang === 'en' ? "Sign Up" : "Zarejestruj się");
+                 document.getElementById('toggleText').innerText = isLoginMode ? (currentLang === 'en' ? "Create account" : "Załóż konto") : (currentLang === 'en' ? "I have an account" : "Mam już konto");
             }
         };
 
